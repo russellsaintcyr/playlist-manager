@@ -24,7 +24,7 @@ export class SpotifyService {
     // console.log(`location.hostname: ${location.hostname}`);
     // console.log(`location.host: ${location.host}`);
     // console.log(`location.href: ${location.href}`);
-    this.callbackRedirectURI = (location.host.includes('github')) ? location.href + 'callback' : `http://${location.host}/callback`;
+    this.callbackRedirectURI = (location.host.includes('github')) ? location.href + 'callback' : `http://${location.host}/#/callback`;
     console.log(`callbackRedirectURI: ${this.callbackRedirectURI}`);
     this.headers = new HttpHeaders({'Authorization': 'Bearer ' + this.bearerToken});
     console.log(`this.headers:`, this.headers);
