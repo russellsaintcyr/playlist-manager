@@ -20,6 +20,7 @@ import { NowPlayingComponent } from './components/now-playing/now-playing.compon
 import { StatsComponent } from './components/stats/stats.component';
 import { AlbumComponent } from './components/album/album.component';
 import { ArtistComponent } from './components/artist/artist.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,10 @@ import { ArtistComponent } from './components/artist/artist.component';
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
+    },
+    { 
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
     },
     AlertService
   ],

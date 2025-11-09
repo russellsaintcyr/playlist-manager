@@ -10,10 +10,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js 12.x
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version: 14.15.0
           cache: "npm"
 
       - name: Install dependencies
