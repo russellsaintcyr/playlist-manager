@@ -16,6 +16,7 @@ export class CallbackComponent implements OnInit {
   public queryStringArray: Array<string>;
 
   constructor(private location: Location, private router: Router) {
+    console.log('CallbackComponent constructor');
     const queryString = this.location.path(true).substring(10);
     this.queryStringArray = queryString.split('&');
   }
@@ -31,13 +32,14 @@ export class CallbackComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('CallbackComponent initialized');
     // feedback
     this.accessToken = this.getQueryVariable('access_token');
     this.tokenType = this.getQueryVariable('token_type');
     this.expiresIn = this.getQueryVariable('expires_in');
     // set token
     localStorage.setItem('bearerToken', this.accessToken);
-    console.log('Updated local storage token');
+    console.log('CallbackComponent Updated bearerToken locally', this.accessToken);
     // redirect
     const savedState = localStorage.getItem('savedState');
     if (savedState !== null && savedState !== undefined) {
