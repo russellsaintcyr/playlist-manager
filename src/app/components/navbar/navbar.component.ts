@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Playlist } from '../../classes/playlist';
@@ -12,6 +13,7 @@ import { Playlist } from '../../classes/playlist';
 export class NavbarComponent implements OnInit {
   public isPlaying: boolean;
   public selectedPlaylist: Playlist | undefined;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private spotifyService: SpotifyService,
@@ -20,14 +22,17 @@ export class NavbarComponent implements OnInit {
     // console.log('getting currently playing.');
     // if (this.spotifyService.getCurrentlyPlaying() !== undefined) {
     //   console.log('got currently playing.');
-    //   this.spotifyService.getCurrentlyPlaying().subscribe(res => {
-    //       console.log(res);
-    //       this.isPlaying = res.is_playing;
-    //     },
-    //     err => {
-    //       console.log('Error: ' + err.statusText);
-    //     }
-    //   )
+    //   this.spotifyService.getCurrentlyPlaying()
+    //     .pipe(takeUntilDestroyed(this.destroyRef))
+    //     .subscribe({
+    //       next: (res) => {
+    //         console.log(res);
+    //         this.isPlaying = res.is_playing;
+    //       },
+    //       error: (err) => {
+    //         console.log('Error: ' + err.statusText);
+    //       }
+    //     });
     // } else {
     //   console.log('got currently playing returned undefined');
     // }
@@ -40,27 +45,31 @@ export class NavbarComponent implements OnInit {
   }
 
   playNextPrevious(direction: string) {
-    this.spotifyService.playNextPrevious(direction).subscribe(
-      (res) => {
-        // this.alertService.success('Playing  ' + direction + ' track');
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this.spotifyService.playNextPrevious(direction)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          // this.alertService.success('Playing  ' + direction + ' track');
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 
   stop() {
-    this.spotifyService.controlPlayback(null, 'pause').subscribe(
-      (res) => {
-        this.alertService.success('Stopping playback');
-        this.isPlaying = false;
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this.spotifyService.controlPlayback(null, 'pause')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.alertService.success('Stopping playback');
+          this.isPlaying = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 }

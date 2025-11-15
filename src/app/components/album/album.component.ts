@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AlbumComponent implements OnInit {
   public album: any;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private spotifyService: SpotifyService,
@@ -24,16 +26,18 @@ export class AlbumComponent implements OnInit {
     } else {
       const albumID = localStorage.getItem('albumID');
       if (albumID) {
-        this.spotifyService.getAlbum(albumID).subscribe(
-          (response) => {
-            this.album = response;
-            // console.log(this.album);
-          },
-          (err) => {
-            console.error(err);
-            this.alertService.error(err._body);
-          }
-        );
+        this.spotifyService.getAlbum(albumID)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (response) => {
+              this.album = response;
+              // console.log(this.album);
+            },
+            error: (err) => {
+              console.error(err);
+              this.alertService.error(err._body);
+            },
+          });
       }
     }
   }

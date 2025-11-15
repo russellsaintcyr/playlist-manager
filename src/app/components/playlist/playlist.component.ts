@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, AfterViewChecked } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Rating } from '../../classes/rating';
 import { NowPlayingComponent } from '../now-playing/now-playing.component';
-import { AfterViewChecked } from '@angular/core';
 import { Track } from '../../classes/track';
 import { MetaTrack } from '../../classes/metatrack';
 import { Router } from '@angular/router';
@@ -31,6 +31,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   private ratingsLoaded: boolean;
   private tracksLoaded: boolean;
   private offset = 0;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private _spotifyService: SpotifyService,
@@ -65,23 +66,25 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   }
 
   loadPlaylist() {
-    this._spotifyService.getPlaylist(this.selectedPlaylist, 0).subscribe(
-      (res) => {
-        this.tracks = res.items;
-        this.playlist = res;
-        // get all the other tracks
-        if (this.playlist.total > this.playlist.limit + this.playlist.offset) {
-          this.showAllTracks();
-        } else {
-          this.tracksLoaded = true;
-        }
-      },
-      (err) => {
-        // console.log('Error: ' + err.statusText);
-        window.open(this._spotifyService.getAuthorizeURL(), '_self');
-        throw new Error(err.statusText);
-      }
-    );
+    this._spotifyService.getPlaylist(this.selectedPlaylist, 0)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.tracks = res.items;
+          this.playlist = res;
+          // get all the other tracks
+          if (this.playlist.total > this.playlist.limit + this.playlist.offset) {
+            this.showAllTracks();
+          } else {
+            this.tracksLoaded = true;
+          }
+        },
+        error: (err) => {
+          // console.log('Error: ' + err.statusText);
+          window.open(this._spotifyService.getAuthorizeURL(), '_self');
+          throw new Error(err.statusText);
+        },
+      });
   }
 
   setRating(rating: number, track: Track) {
@@ -195,26 +198,30 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
 
   showAllTracks() {
     // call with offset, and then add
-    this._spotifyService.getURL(this.playlist.next).subscribe(
-      (res) => {
-        console.log(`Adding ${res.items.length} items to tracks array (${this.playlist.total} total).`);
-        // update next URL so the offset changes
-        this.playlist.next = res.next;
-        // push new tracks
-        res.items.forEach((element) => {
-          this.tracks.push(element);
-        });
-        // get all the other tracks
-        if (this.playlist.total > this.tracks.length) {
-          this.showAllTracks();
-        } else {
-          this.tracksLoaded = true;
-        }
-      },
-      (err) => {
-        throw new Error(err.statusText);
-      }
-    );
+    this._spotifyService.getURL(this.playlist.next)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          console.log(
+            `Adding ${res.items.length} items to tracks array (${this.playlist.total} total).`
+          );
+          // update next URL so the offset changes
+          this.playlist.next = res.next;
+          // push new tracks
+          res.items.forEach((element) => {
+            this.tracks.push(element);
+          });
+          // get all the other tracks
+          if (this.playlist.total > this.tracks.length) {
+            this.showAllTracks();
+          } else {
+            this.tracksLoaded = true;
+          }
+        },
+        error: (err) => {
+          throw new Error(err.statusText);
+        },
+      });
   }
 
   updateCounts() {
@@ -223,15 +230,17 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   }
 
   loadOffset(url) {
-    this._spotifyService.getURL(url).subscribe(
-      (res) => {
-        this.tracks = res.items;
-        this.playlist = res;
-      },
-      (err) => {
-        throw new Error(err.statusText);
-      }
-    );
+    this._spotifyService.getURL(url)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.tracks = res.items;
+          this.playlist = res;
+        },
+        error: (err) => {
+          throw new Error(err.statusText);
+        },
+      });
   }
 
   playRating(rating: number, action: string) {
@@ -245,39 +254,45 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
     if (arrTracks.length > 0) {
       if (action === 'play') {
         this.alertService.info('Playing selected tracks');
-        this._spotifyService.controlPlayback({ uris: arrTracks }, 'play').subscribe(
-          (res) => {
-            console.log('Playback successfully called');
-          },
-          (err) => {
-            console.error(err);
-            this.alertService.error(err._body);
-          }
-        );
+        this._spotifyService.controlPlayback({ uris: arrTracks }, 'play')
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (res) => {
+              console.log('Playback successfully called');
+            },
+            error: (err) => {
+              console.error(err);
+              this.alertService.error(err._body);
+            },
+          });
       } else {
         this.alertService.info('Creating new playlist');
         // TODO get playlist name from user?
         const playlistName = rating + '-star Tracks';
         // first create playlist, then add tracks
-        this._spotifyService.createPlaylist({ name: playlistName }).subscribe(
-          (res) => {
-            this._spotifyService.addToPlaylist({ uris: arrTracks }, res.id).subscribe(
-              (res2) => {
-                this.alertService.success(
-                  'Created new playlist ' + playlistName + ' with ' + arrTracks.length + ' tracks.'
-                );
-              },
-              (err) => {
-                console.error(err);
-                this.alertService.error(err._body);
-              }
-            );
-          },
-          (err) => {
-            console.error(err);
-            this.alertService.error(err._body);
-          }
-        );
+        this._spotifyService.createPlaylist({ name: playlistName })
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (res) => {
+              this._spotifyService.addToPlaylist({ uris: arrTracks }, res.id)
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe({
+                  next: (res2) => {
+                    this.alertService.success(
+                      'Created new playlist ' + playlistName + ' with ' + arrTracks.length + ' tracks.'
+                    );
+                  },
+                  error: (err) => {
+                    console.error(err);
+                    this.alertService.error(err._body);
+                  },
+                });
+            },
+            error: (err) => {
+              console.error(err);
+              this.alertService.error(err._body);
+            },
+          });
       }
     } else {
       this.alertService.info('No songs assigned to this rating.');
@@ -285,29 +300,33 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   }
 
   playAllTracks() {
-    this._spotifyService.controlPlayback({ context_uri: this.selectedPlaylist.uri }, 'play').subscribe(
-      (res) => {
-        this.alertService.success('Playing all tracks in playlist');
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this._spotifyService.controlPlayback({ context_uri: this.selectedPlaylist.uri }, 'play')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.alertService.success('Playing all tracks in playlist');
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 
   playTrack(track) {
     localStorage.setItem('selectedTrack', JSON.stringify(track));
     // now tell to play
-    this._spotifyService.controlPlayback({ uris: [track.uri] }, 'play').subscribe(
-      (res) => {
-        // console.log(res);
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this._spotifyService.controlPlayback({ uris: [track.uri] }, 'play')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          // console.log(res);
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 
   viewArtist(artistID) {

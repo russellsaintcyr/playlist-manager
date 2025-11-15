@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
@@ -14,6 +15,7 @@ export class PlaylistsComponent implements OnInit {
   public pub: string;
   public tracks: Object;
   public playlists;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private _spotifyService: SpotifyService,
@@ -49,18 +51,20 @@ export class PlaylistsComponent implements OnInit {
   }
 
   retrievePlaylists() {
-    this._spotifyService.getPlaylists().subscribe(
-      (res) => {
-        this.playlists = res;
-        localStorage.setItem('playlists', JSON.stringify(res));
-      },
-      (err) => {
-        this.alertService.warn('Error retrieving playlists: ' + err.statusText);
-        this.alertService.info('Re-authorizing Spotify token in 2 seconds...');
-        let intervalId = setInterval(() => this.reAuthorize(intervalId), 2000);
-        // throw new Error(err.statusText);
-      }
-    );
+    this._spotifyService.getPlaylists()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.playlists = res;
+          localStorage.setItem('playlists', JSON.stringify(res));
+        },
+        error: (err) => {
+          this.alertService.warn('Error retrieving playlists: ' + err.statusText);
+          this.alertService.info('Re-authorizing Spotify token in 2 seconds...');
+          let intervalId = setInterval(() => this.reAuthorize(intervalId), 2000);
+          // throw new Error(err.statusText);
+        },
+      });
   }
 
   setPlaylist(playlist) {
@@ -70,28 +74,32 @@ export class PlaylistsComponent implements OnInit {
   }
 
   loadOffset(url) {
-    this._spotifyService.getURL(url).subscribe(
-      (res) => {
-        this.playlists = res;
-        localStorage.setItem('playlists', JSON.stringify(res));
-      },
-      (err) => {
-        throw new Error(err.statusText);
-      }
-    );
+    this._spotifyService.getURL(url)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.playlists = res;
+          localStorage.setItem('playlists', JSON.stringify(res));
+        },
+        error: (err) => {
+          throw new Error(err.statusText);
+        },
+      });
   }
 
   showPlaylist(offset) {
-    this._spotifyService.getPlaylist('46JHZX9X1hHUpxhZCkKuS1', offset).subscribe(
-      (res) => {
-        console.log(res);
-        this.tracks = res.items;
-        localStorage.setItem('tracks-' + offset, JSON.stringify(res.items));
-      },
-      (err) => {
-        // console.log('Error: ' + err.statusText);
-        throw new Error(err.statusText);
-      }
-    );
+    this._spotifyService.getPlaylist('46JHZX9X1hHUpxhZCkKuS1', offset)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          this.tracks = res.items;
+          localStorage.setItem('tracks-' + offset, JSON.stringify(res.items));
+        },
+        error: (err) => {
+          // console.log('Error: ' + err.statusText);
+          throw new Error(err.statusText);
+        },
+      });
   }
 }

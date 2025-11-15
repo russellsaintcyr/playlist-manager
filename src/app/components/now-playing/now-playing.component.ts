@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Track } from '../../classes/track';
@@ -18,6 +19,7 @@ export class NowPlayingComponent implements OnInit {
   // private static spotifyService: SpotifyService;
   // private static alertService: AlertService;
 
+  private destroyRef = inject(DestroyRef);
   private timerRefresh: number;
   private timerProgressBar: number;
   private refreshPeriod = 60000;
@@ -82,12 +84,12 @@ export class NowPlayingComponent implements OnInit {
     this.timerRefresh = setTimeout(function () {
       location.reload();
     }, this.refreshPeriod);
-  }
-
-  ngOnDestroy() {
-    console.log('Clearing timers');
-    clearTimeout(this.timerRefresh);
-    clearTimeout(this.timerProgressBar);
+    // cleanup timers on destroy
+    this.destroyRef.onDestroy(() => {
+      console.log('Clearing timers');
+      if (this.timerRefresh) clearTimeout(this.timerRefresh);
+      if (this.timerProgressBar) clearTimeout(this.timerProgressBar);
+    });
   }
 
   computeTime(obj) {
@@ -100,74 +102,76 @@ export class NowPlayingComponent implements OnInit {
   }
 
   getCurrentlyPlaying(intervalId) {
-    this.spotifyService.getCurrentlyPlaying().subscribe(
-      (response) => {
-        // console.log('getCurrentlyPlaying response:', response);
-        // console.log(response);
-        if (response === null || response.item === null) {
-          this.alertService.warn('No track is currently playing.');
-        } else {
-          // store last track if there is one
-          if (this.track !== undefined) {
-            this.lastTrack = this.track;
-          }
-          // first image in array is largest
-          const artists: Artist[] = [];
-          response.item.artists.forEach((element) => artists.push(new Artist(element.name, element.id)));
-          this.track = new Track(
-            response.item.uri,
-            response.item.name,
-            response.item.album.images[0].url,
-            response.item.album.name,
-            response.item.artists[0].name,
-            response.item.id,
-            response.progress_ms,
-            response.item.duration_ms,
-            response.is_playing,
-            response.item.album.release_date,
-            response.item.album.id,
-            response.item.artists[0].id,
-            artists
-          );
-          // console.log(this.track);
-          // set playback times, and call loop
-          this.used_ms = 0;
-          this.initial_progress_ms = this.track.progress_ms;
-          if (this.track.is_playing) {
-            this.computeTime(this);
-          }
-          // images
-          document.body.style.backgroundImage = "url('" + response.item.album.images[0].url + "')";
-          if (intervalId !== null) {
-            clearInterval(intervalId);
-          }
-          // search for existing rating
-          console.log('Searching for rating for ' + response.item.uri);
-          const obj = this.ratings.find(function (obj: Rating) {
-            return obj.trackURI === response.item.uri;
-          });
-          if (obj === undefined) {
-            console.log(`No rating found for ${response.item.uri}`);
-            // NowPlayingComponent.showStars(0, response.item.id, null);
+    this.spotifyService.getCurrentlyPlaying()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          // console.log('getCurrentlyPlaying response:', response);
+          // console.log(response);
+          if (response === null || response.item === null) {
+            this.alertService.warn('No track is currently playing.');
           } else {
-            this.track.rating = obj.rating;
-            // NowPlayingComponent.showStars(obj.rating, response.item.id, null);
-            // TODO add this as a preference/setting
-            if (this.autoSkip) {
-              console.log('Skipping song since is already rated.');
-              this.playNextPrevious('next');
+            // store last track if there is one
+            if (this.track !== undefined) {
+              this.lastTrack = this.track;
+            }
+            // first image in array is largest
+            const artists: Artist[] = [];
+            response.item.artists.forEach((element) => artists.push(new Artist(element.name, element.id)));
+            this.track = new Track(
+              response.item.uri,
+              response.item.name,
+              response.item.album.images[0].url,
+              response.item.album.name,
+              response.item.artists[0].name,
+              response.item.id,
+              response.progress_ms,
+              response.item.duration_ms,
+              response.is_playing,
+              response.item.album.release_date,
+              response.item.album.id,
+              response.item.artists[0].id,
+              artists
+            );
+            // console.log(this.track);
+            // set playback times, and call loop
+            this.used_ms = 0;
+            this.initial_progress_ms = this.track.progress_ms;
+            if (this.track.is_playing) {
+              this.computeTime(this);
+            }
+            // images
+            document.body.style.backgroundImage = "url('" + response.item.album.images[0].url + "')";
+            if (intervalId !== null) {
+              clearInterval(intervalId);
+            }
+            // search for existing rating
+            console.log('Searching for rating for ' + response.item.uri);
+            const obj = this.ratings.find(function (obj: Rating) {
+              return obj.trackURI === response.item.uri;
+            });
+            if (obj === undefined) {
+              console.log(`No rating found for ${response.item.uri}`);
+              // NowPlayingComponent.showStars(0, response.item.id, null);
+            } else {
+              this.track.rating = obj.rating;
+              // NowPlayingComponent.showStars(obj.rating, response.item.id, null);
+              // TODO add this as a preference/setting
+              if (this.autoSkip) {
+                console.log('Skipping song since is already rated.');
+                this.playNextPrevious('next');
+              }
             }
           }
-        }
-        this.loadingTrack = false;
-      },
-      (err) => {
-        this.alertService.warn('Error loading now playing. ' + err.statusText);
-        // throw new Error(err.statusText);
-        window.open(this.spotifyService.getAuthorizeURL(), '_self');
-        this.loadingTrack = false;
-      }
-    );
+          this.loadingTrack = false;
+        },
+        error: (err) => {
+          this.alertService.warn('Error loading now playing. ' + err.statusText);
+          // throw new Error(err.statusText);
+          window.open(this.spotifyService.getAuthorizeURL(), '_self');
+          this.loadingTrack = false;
+        },
+      });
   }
 
   setRating(rating: number, track: Track) {
@@ -197,42 +201,48 @@ export class NowPlayingComponent implements OnInit {
 
   playNextPrevious(direction: string) {
     this.loadingTrack = true;
-    this.spotifyService.playNextPrevious(direction).subscribe(
-      (res) => {
-        // update track
-        const intervalId = setInterval(() => this.getCurrentlyPlaying(intervalId), 1500);
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this.spotifyService.playNextPrevious(direction)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          // update track
+          const intervalId = setInterval(() => this.getCurrentlyPlaying(intervalId), 1500);
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 
   stop() {
-    this.spotifyService.controlPlayback(null, 'pause').subscribe(
-      (res) => {
-        this.track.is_playing = false;
-        clearTimeout(this.timerProgressBar);
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this.spotifyService.controlPlayback(null, 'pause')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.track.is_playing = false;
+          clearTimeout(this.timerProgressBar);
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 
   play() {
-    this.spotifyService.controlPlayback(null, 'play').subscribe(
-      (res) => {
-        this.track.is_playing = true;
-        this.computeTime(this);
-      },
-      (err) => {
-        console.error(err);
-        this.alertService.error(err._body);
-      }
-    );
+    this.spotifyService.controlPlayback(null, 'play')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.track.is_playing = true;
+          this.computeTime(this);
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error(err._body);
+        },
+      });
   }
 
   viewAlbum() {
