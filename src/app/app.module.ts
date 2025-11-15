@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -22,36 +22,33 @@ import { AlbumComponent } from './components/album/album.component';
 import { ArtistComponent } from './components/artist/artist.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    DashboardComponent,
-    FooterComponent,
-    HeaderComponent,
-    PlaylistsComponent,
-    LoginComponent,
-    PlaylistComponent,
-    SettingsComponent,
-    CallbackComponent,
-    AlertComponent,
-    NowPlayingComponent,
-    StatsComponent,
-    AlbumComponent,
-    ArtistComponent,
-  ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
-  providers: [
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler,
-    },
-    {
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy,
-    },
-    AlertService,
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        NavbarComponent,
+        DashboardComponent,
+        FooterComponent,
+        HeaderComponent,
+        PlaylistsComponent,
+        LoginComponent,
+        PlaylistComponent,
+        SettingsComponent,
+        CallbackComponent,
+        AlertComponent,
+        NowPlayingComponent,
+        StatsComponent,
+        AlbumComponent,
+        ArtistComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule, FormsModule, AppRoutingModule], providers: [
+        {
+            provide: ErrorHandler,
+            useClass: GlobalErrorHandler,
+        },
+        {
+            provide: LocationStrategy,
+            useClass: HashLocationStrategy,
+        },
+        AlertService,
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
