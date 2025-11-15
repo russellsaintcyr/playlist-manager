@@ -1,4 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -15,7 +17,6 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { GlobalErrorHandler } from './classes/GlobalErrorHandler';
 import { AlertService } from './services/alert.service';
-import { AlertComponent } from './directives/alert.component';
 import { NowPlayingComponent } from './components/now-playing/now-playing.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { AlbumComponent } from './components/album/album.component';
@@ -33,13 +34,18 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
         PlaylistComponent,
         SettingsComponent,
         CallbackComponent,
-        AlertComponent,
         NowPlayingComponent,
         StatsComponent,
         AlbumComponent,
         ArtistComponent,
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule, FormsModule, AppRoutingModule], providers: [
+    bootstrap: [AppComponent], imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        FormsModule,
+        AppRoutingModule
+    ], providers: [
         {
             provide: ErrorHandler,
             useClass: GlobalErrorHandler,
