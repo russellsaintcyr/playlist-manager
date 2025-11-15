@@ -56,6 +56,11 @@ const routes: Routes = [
     path: 'callback',
     component: CallbackComponent,
   },
+  // Wildcard route must be last - catches any unmatched routes including callback with fragments
+  {
+    path: '**',
+    component: CallbackComponent,
+  },
 ];
 
 @NgModule({

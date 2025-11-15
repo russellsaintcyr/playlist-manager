@@ -14,18 +14,19 @@ export class SpotifyService {
 
   constructor(private httpClient: HttpClient) {
     // save state to return if token expired
-    const currentState = location.pathname.substring(1);
+    // console.log('SpotifyService constructor', location);
+    const currentState = location.hash;
     if (currentState !== 'callback') {
       localStorage.setItem('savedState', currentState);
     }
     // TODO remove hard-coded user ID
     this.userID = 'x1111x';
     this.bearerToken = localStorage.getItem('bearerToken');
-    // console.log(`location`, location);
+    console.log(`bearerToken`, this.bearerToken);
     this.callbackRedirectURI = `${location.origin}${location.pathname}#/callback`;
     console.log(`callbackRedirectURI: ${this.callbackRedirectURI}`);
     this.headers = new HttpHeaders({ Authorization: 'Bearer ' + this.bearerToken });
-    // console.log(`this.headers:`, this.headers);
+    console.log(`this.headers:`, this.headers);
   }
 
   getPlaylist(playlist, offset: number): Observable<any> {
