@@ -20,7 +20,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/404.html"
+              "src/404.html",
+              "src/.nojekyll"
             ],
             "styles": [
               "src/styles.css"
