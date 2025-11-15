@@ -1,47 +1,55 @@
-<div class="container" *ngIf="track !== undefined">
-  <div class="row">
-    <div class="col-md-8">
-      <img src="{{ track.coverImage }}" class="img-responsive albumCoverImg" />
-    </div>
-    <div class="col-md-4">
-      <i
-        class="glyphicon glyphicon-thumbs-down nowPlaying"
-        id="{{ 'THUMBS3-' + track.id }}"
-        [class.star-selected]="track.rating === 3"
-        (click)="setRating(3, track)"
-      ></i>
-      <i
-        class="glyphicon glyphicon-hand-right nowPlaying"
-        id="{{ 'THUMBS4-' + track.id }}"
-        [class.star-selected]="track.rating === 4"
-        (click)="setRating(4, track)"
-      ></i>
-      <i
-        class="glyphicon glyphicon-thumbs-up nowPlaying"
-        id="{{ 'THUMBS5-' + track.id }}"
-        [class.star-selected]="track.rating === 5"
-        (click)="setRating(5, track)"
-      ></i>
-      <br />
-      <span *ngIf="loadingTrack"> <i class="glyphicon glyphicon-refresh"></i>&nbsp; Loading track </span>
-      <div class="trackDetails">
-        <!-- TODO loop through artists, and link -->
-        <span class="trackName">{{ track.name }}</span>
-        <br /><i class="glyphicon glyphicon-user"></i>&nbsp;
-        <span *ngFor="let artist of track.artists; let i = index">
-          <a (click)="viewArtist(artist.id)" [routerLink]="">{{ artist.name }}</a
-          ><span *ngIf="i < track.artists.length - 1">, </span>
-        </span>
+@if (track !== undefined) {
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <img src="{{ track.coverImage }}" class="img-responsive albumCoverImg" />
+      </div>
+      <div class="col-md-4">
+        <i
+          class="glyphicon glyphicon-thumbs-down nowPlaying"
+          id="{{ 'THUMBS3-' + track.id }}"
+          [class.star-selected]="track.rating === 3"
+          (click)="setRating(3, track)"
+        ></i>
+        <i
+          class="glyphicon glyphicon-hand-right nowPlaying"
+          id="{{ 'THUMBS4-' + track.id }}"
+          [class.star-selected]="track.rating === 4"
+          (click)="setRating(4, track)"
+        ></i>
+        <i
+          class="glyphicon glyphicon-thumbs-up nowPlaying"
+          id="{{ 'THUMBS5-' + track.id }}"
+          [class.star-selected]="track.rating === 5"
+          (click)="setRating(5, track)"
+        ></i>
         <br />
-        <i class="glyphicon glyphicon-cd"></i>&nbsp;
-        <a (click)="viewAlbum()" [routerLink]="">{{ track.albumName }} ({{ track.albumYear | date: 'yyyy' }})</a>
-        <br />
-        <i class="glyphicon glyphicon-time"></i> &nbsp;{{ track.duration_ms | date: 'm:ss' }} &nbsp;<progress
-          *ngIf="track.is_playing"
-          id="file"
-          max="{{ track.duration_ms }}"
-          value="{{ adjusted_progress_ms }}"
-        ></progress>
+        @if (loadingTrack) {
+          <span> <i class="glyphicon glyphicon-refresh"></i>&nbsp; Loading track </span>
+        }
+        <div class="trackDetails">
+          <!-- TODO loop through artists, and link -->
+          <span class="trackName">{{ track.name }}</span>
+          <br /><i class="glyphicon glyphicon-user"></i>&nbsp;
+          @for (artist of track.artists; track artist; let i = $index) {
+            <span>
+              <a (click)="viewArtist(artist.id)" [routerLink]="">{{ artist.name }}</a
+                >@if (i < track.artists.length - 1) {
+                <span>, </span>
+              }
+            </span>
+          }
+          <br />
+          <i class="glyphicon glyphicon-cd"></i>&nbsp;
+          <a (click)="viewAlbum()" [routerLink]="">{{ track.albumName }} ({{ track.albumYear | date: 'yyyy' }})</a>
+          <br />
+          <i class="glyphicon glyphicon-time"></i> &nbsp;{{ track.duration_ms | date: 'm:ss' }} &nbsp;@if (track.is_playing) {
+          <progress
+            id="file"
+            max="{{ track.duration_ms }}"
+            value="{{ adjusted_progress_ms }}"
+          ></progress>
+        }
         &nbsp;{{ adjusted_progress_ms | date: 'm:ss' }}
         <br />
         <i class="glyphicon glyphicon glyphicon-list"></i>
@@ -50,19 +58,28 @@
       <!-- playback -->
       <div>
         <br />
-        <button *ngIf="track.is_playing" type="button" class="btn btn-success" (click)="stop()">
-          <i class="glyphicon glyphicon-stop"></i>
-        </button>
-        <button *ngIf="!track.is_playing" type="button" class="btn btn-success" (click)="play()">
-          <i class="glyphicon glyphicon-play"></i>
-        </button>
-        <button *ngIf="track.is_playing" type="button" class="btn btn-success" (click)="playNextPrevious('previous')">
-          <i class="glyphicon glyphicon-backward"></i>
-        </button>
-        <button *ngIf="track.is_playing" type="button" class="btn btn-success" (click)="playNextPrevious('next')">
-          <i class="glyphicon glyphicon-forward"></i>
-        </button>
+        @if (track.is_playing) {
+          <button type="button" class="btn btn-success" (click)="stop()">
+            <i class="glyphicon glyphicon-stop"></i>
+          </button>
+        }
+        @if (!track.is_playing) {
+          <button type="button" class="btn btn-success" (click)="play()">
+            <i class="glyphicon glyphicon-play"></i>
+          </button>
+        }
+        @if (track.is_playing) {
+          <button type="button" class="btn btn-success" (click)="playNextPrevious('previous')">
+            <i class="glyphicon glyphicon-backward"></i>
+          </button>
+        }
+        @if (track.is_playing) {
+          <button type="button" class="btn btn-success" (click)="playNextPrevious('next')">
+            <i class="glyphicon glyphicon-forward"></i>
+          </button>
+        }
       </div>
     </div>
   </div>
 </div>
+}

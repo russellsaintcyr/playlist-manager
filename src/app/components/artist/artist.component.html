@@ -3,24 +3,32 @@
     <div class="col-md-12">
       <h2>{{ artist.name }}</h2>
       <img src="{{ artist.images[1].url }}" class="img-responsive albumCoverImg" alt="Cover" />
-      <div *ngIf="artist.genres.length != 0">
-        <h3>Genres:</h3>
-        <ul>
-          <li *ngFor="let genre of artist.genres; let i = index">
-            {{ genre }}
-          </li>
-        </ul>
-      </div>
-      <div *ngIf="albums.length != 0">
-        <h3>Albums:</h3>
-        <ul>
-          <li *ngFor="let album of albums; let i = index">
-            <a (click)="viewAlbum(album.id)" [routerLink]="">{{ album.name }}</a> ({{
-              album.release_date | date: 'yyyy'
-            }})
-          </li>
-        </ul>
-      </div>
+      @if (artist.genres.length != 0) {
+        <div>
+          <h3>Genres:</h3>
+          <ul>
+            @for (genre of artist.genres; track genre; let i = $index) {
+              <li>
+                {{ genre }}
+              </li>
+            }
+          </ul>
+        </div>
+      }
+      @if (albums.length != 0) {
+        <div>
+          <h3>Albums:</h3>
+          <ul>
+            @for (album of albums; track album; let i = $index) {
+              <li>
+                <a (click)="viewAlbum(album.id)" [routerLink]="">{{ album.name }}</a> ({{
+                album.release_date | date: 'yyyy'
+                }})
+              </li>
+            }
+          </ul>
+        </div>
+      }
     </div>
   </div>
 </div>

@@ -7,7 +7,9 @@
     <button type="button" class="btn btn-default" (click)="setBearerToken()">Set Token</button>
   </div>
 </form>
-<div *ngIf="bearerToken === null">No bearerToken found in local storage.</div>
+@if (bearerToken === null) {
+  <div>No bearerToken found in local storage.</div>
+}
 
 <hr />
 <app-stats></app-stats>

@@ -18,12 +18,14 @@
           Now Playing
         </a>
       </li>
-      <li class="nav-item" *ngIf="selectedPlaylist">
-        <a class="nav-link" routerLink="playlist">
-          <i class="glyphicon glyphicon-music"></i>
-          {{ selectedPlaylist.name }}
-        </a>
-      </li>
+      @if (selectedPlaylist) {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="playlist">
+            <i class="glyphicon glyphicon-music"></i>
+            {{ selectedPlaylist.name }}
+          </a>
+        </li>
+      }
       <li class="nav-item">
         <a class="nav-link" routerLink="settings">
           <i class="glyphicon glyphicon-cog"></i>
@@ -45,13 +47,15 @@
     </ul>
   </div>
   <!-- playback -->
-  <div *ngIf="isPlaying">
-    <button type="button" class="btn btn-success" (click)="stop()"><i class="glyphicon glyphicon-stop"></i></button>
-    <button type="button" class="btn btn-success" (click)="playNextPrevious('previous')">
-      <i class="glyphicon glyphicon-backward"></i>
-    </button>
-    <button type="button" class="btn btn-success" (click)="playNextPrevious('next')">
-      <i class="glyphicon glyphicon-forward"></i>
-    </button>
-  </div>
+  @if (isPlaying) {
+    <div>
+      <button type="button" class="btn btn-success" (click)="stop()"><i class="glyphicon glyphicon-stop"></i></button>
+      <button type="button" class="btn btn-success" (click)="playNextPrevious('previous')">
+        <i class="glyphicon glyphicon-backward"></i>
+      </button>
+      <button type="button" class="btn btn-success" (click)="playNextPrevious('next')">
+        <i class="glyphicon glyphicon-forward"></i>
+      </button>
+    </div>
+  }
 </nav>

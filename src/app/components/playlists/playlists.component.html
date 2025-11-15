@@ -1,23 +1,35 @@
-<div *ngIf="playlists !== null">
-  Showing {{ playlists.offset }} to
-  <span *ngIf="playlists.next !== null">{{ playlists.limit + playlists.offset }}</span>
-  <span *ngIf="playlists.next === null">{{ playlists.total }}</span>
-  of {{ playlists.total }} playlists.
-  <div *ngIf="playlists.previous !== null">
-    <a (click)="loadOffset(playlists.previous)" href="javascript:void(0)">Previous</a>
+@if (playlists !== null) {
+  <div>
+    Showing {{ playlists.offset }} to
+    @if (playlists.next !== null) {
+      <span>{{ playlists.limit + playlists.offset }}</span>
+    }
+    @if (playlists.next === null) {
+      <span>{{ playlists.total }}</span>
+    }
+    of {{ playlists.total }} playlists.
+    @if (playlists.previous !== null) {
+      <div>
+        <a (click)="loadOffset(playlists.previous)" href="javascript:void(0)">Previous</a>
+      </div>
+    }
+    @if (playlists.next !== null) {
+      <div>
+        <a (click)="loadOffset(playlists.next)" href="javascript:void(0)">Next</a>
+      </div>
+    }
+    <ol>
+      @for (playlist of playlists.items; track playlist; let i = $index) {
+        <li>
+          <button class="btn btn-success" (click)="setPlaylist(playlist)" style="margin: 5px">
+            <img src="{{ playlist.images[0].url }}" width="50" height="50" />
+          </button>
+          <a (click)="setPlaylist(playlist)" href="javascript:void(0)">{{ playlist.name }}</a>
+        </li>
+      }
+    </ol>
   </div>
-  <div *ngIf="playlists.next !== null">
-    <a (click)="loadOffset(playlists.next)" href="javascript:void(0)">Next</a>
-  </div>
-  <ol>
-    <li *ngFor="let playlist of playlists.items; let i = index">
-      <button class="btn btn-success" (click)="setPlaylist(playlist)" style="margin: 5px">
-        <img src="{{ playlist.images[0].url }}" width="50" height="50" />
-      </button>
-      <a (click)="setPlaylist(playlist)" href="javascript:void(0)">{{ playlist.name }}</a>
-    </li>
-  </ol>
-</div>
+}
 
 <div>
   <a (click)="refreshPlaylists()" href="javascript:void(0)">Refresh playlists</a>

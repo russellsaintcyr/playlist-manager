@@ -6,15 +6,17 @@
     <div class="col-md-6">
       <h2>{{ album.name }}</h2>
       <br /><i class="glyphicon glyphicon-user"></i>&nbsp;<a
-        (click)="viewArtist(album.artists[0].id)"
-        [routerLink]=""
-        >{{ album.artists[0].name }}</a
+      (click)="viewArtist(album.artists[0].id)"
+      [routerLink]=""
+      >{{ album.artists[0].name }}</a
       >
       <br /><i class="glyphicon glyphicon-cd"></i>&nbsp;{{ album.release_date | date: 'MMMM dd, yyyy' }}
       <ol>
-        <li *ngFor="let track of album.tracks.items; let i = index">
-          {{ track.name }} ({{ track.duration_ms | date: 'm:ss' }})
-        </li>
+        @for (track of album.tracks.items; track track; let i = $index) {
+          <li>
+            {{ track.name }} ({{ track.duration_ms | date: 'm:ss' }})
+          </li>
+        }
       </ol>
     </div>
   </div>
