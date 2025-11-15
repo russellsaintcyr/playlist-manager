@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Build for GitHub Pages
-        run: npm run build:gh-pages
+        run: npx ng build --configuration production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
