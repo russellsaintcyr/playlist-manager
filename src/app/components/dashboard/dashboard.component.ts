@@ -2,12 +2,15 @@ import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { Artist } from '../../classes/artist';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-  providers: [SpotifyService],
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
+    providers: [SpotifyService],
+    standalone: true,
+    imports: [FormsModule],
 })
 export class DashboardComponent implements OnInit {
   // Injected dependencies

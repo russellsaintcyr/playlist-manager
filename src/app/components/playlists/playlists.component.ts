@@ -5,10 +5,11 @@ import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-playlists',
-  templateUrl: './playlists.component.html',
-  styleUrls: ['./playlists.component.css'],
-  providers: [SpotifyService],
+    selector: 'app-playlists',
+    templateUrl: './playlists.component.html',
+    styleUrls: ['./playlists.component.css'],
+    providers: [SpotifyService],
+    standalone: true,
 })
 export class PlaylistsComponent implements OnInit {
   private priv: string;
@@ -30,10 +31,10 @@ export class PlaylistsComponent implements OnInit {
     // check if we have playlists
     if (localStorage.getItem('playlists') === null) {
       this.retrievePlaylists();
-      this.alertService.info('Retrieved playlists.');
+      console.info('Retrieved playlists.');
     } else {
       if (localStorage.getItem('playlists')) this.playlists = JSON.parse(localStorage.getItem('playlists')!);
-      this.alertService.info('Loaded playlists from local data.');
+      console.info('Loaded playlists from local data.');
     }
   }
 

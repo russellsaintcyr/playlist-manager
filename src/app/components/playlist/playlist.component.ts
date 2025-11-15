@@ -6,13 +6,15 @@ import { Rating } from '../../classes/rating';
 import { NowPlayingComponent } from '../now-playing/now-playing.component';
 import { Track } from '../../classes/track';
 import { MetaTrack } from '../../classes/metatrack';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-playlist',
-  templateUrl: './playlist.component.html',
-  styleUrls: ['./playlist.component.css'],
-  providers: [SpotifyService],
+    selector: 'app-playlist',
+    templateUrl: './playlist.component.html',
+    styleUrls: ['./playlist.component.css'],
+    providers: [SpotifyService],
+    standalone: true,
+    imports: [RouterLink],
 })
 export class PlaylistComponent implements OnInit, AfterViewChecked {
   // Injected dependencies

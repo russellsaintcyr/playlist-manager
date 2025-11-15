@@ -22,11 +22,11 @@ export class SpotifyService {
     // TODO remove hard-coded user ID
     this.userID = 'x1111x';
     this.bearerToken = localStorage.getItem('bearerToken');
-    console.log(`bearerToken`, this.bearerToken);
+    // console.log(`bearerToken`, this.bearerToken);
     this.callbackRedirectURI = `${location.origin}${location.pathname}#/callback`;
-    console.log(`callbackRedirectURI: ${this.callbackRedirectURI}`);
+    // console.log(`callbackRedirectURI: ${this.callbackRedirectURI}`);
     this.headers = new HttpHeaders({ Authorization: 'Bearer ' + this.bearerToken });
-    console.log(`this.headers:`, this.headers);
+    // console.log(`this.headers:`, this.headers);
   }
 
   getPlaylist(playlist, offset: number): Observable<any> {

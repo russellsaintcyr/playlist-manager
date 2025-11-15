@@ -3,12 +3,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Playlist } from '../../classes/playlist';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
-  providers: [SpotifyService],
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.css'],
+    providers: [SpotifyService],
+    standalone: true,
+    imports: [RouterLink],
 })
 export class NavbarComponent implements OnInit {
   public isPlaying: boolean;

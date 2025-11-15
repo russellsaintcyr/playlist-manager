@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Rating } from '../../classes/rating';
 
 @Component({
-  selector: 'app-stats',
-  templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.css'],
+    selector: 'app-stats',
+    templateUrl: './stats.component.html',
+    styleUrls: ['./stats.component.css'],
+    standalone: true,
 })
 export class StatsComponent implements OnInit {
   public ratings: Array<Rating> | null = [];

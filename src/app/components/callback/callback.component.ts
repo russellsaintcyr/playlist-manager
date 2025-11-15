@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'callback',
-  templateUrl: './callback.component.html',
-  styleUrls: ['./callback.component.css'],
+    selector: 'callback',
+    templateUrl: './callback.component.html',
+    styleUrls: ['./callback.component.css'],
+    standalone: true,
 })
 export class CallbackComponent implements OnInit {
   // Injected dependencies

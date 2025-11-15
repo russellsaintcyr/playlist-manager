@@ -4,14 +4,17 @@ import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Track } from '../../classes/track';
 import { Rating } from '../../classes/rating';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Artist } from '../../classes/artist';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-now-playing',
-  templateUrl: './now-playing.component.html',
-  styleUrls: ['./now-playing.component.css'],
-  providers: [SpotifyService],
+    selector: 'app-now-playing',
+    templateUrl: './now-playing.component.html',
+    styleUrls: ['./now-playing.component.css'],
+    providers: [SpotifyService],
+    standalone: true,
+    imports: [RouterLink, DatePipe],
 })
 export class NowPlayingComponent implements OnInit {
   // private spotifyService: SpotifyService;
