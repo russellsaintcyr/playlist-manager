@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { AppSettings } from '../../../appSettings';
 
@@ -8,10 +8,14 @@ import { AppSettings } from '../../../appSettings';
   styleUrls: ['./settings.component.css'],
 })
 export class SettingsComponent implements OnInit {
+  // Injected dependencies
+  private alertService = inject(AlertService);
+
+  // Public properties
   public ratingSystem = 'THUMBS';
   public bearerToken: string | null;
 
-  constructor(private alertService: AlertService) {
+  constructor() {
     this.bearerToken = localStorage.getItem('bearerToken');
   }
 

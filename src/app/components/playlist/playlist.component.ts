@@ -15,6 +15,12 @@ import { Router } from '@angular/router';
   providers: [SpotifyService],
 })
 export class PlaylistComponent implements OnInit, AfterViewChecked {
+  // Injected dependencies
+  private destroyRef = inject(DestroyRef);
+  private _spotifyService = inject(SpotifyService);
+  private alertService = inject(AlertService);
+  private router = inject(Router);
+
   // private playlistID: string; //46JHZX9X1hHUpxhZCkKuS1
   public selectedPlaylist;
   public tracks: Array<MetaTrack>;
@@ -31,15 +37,6 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   private ratingsLoaded: boolean;
   private tracksLoaded: boolean;
   private offset = 0;
-  private destroyRef = inject(DestroyRef);
-
-  constructor(
-    private _spotifyService: SpotifyService,
-    private alertService: AlertService,
-    private router: Router
-  ) {
-    this.ratingsLoaded = false;
-  }
 
   ngAfterViewChecked() {
     // console.log('ngAfterViewChecked called.');
@@ -58,6 +55,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     // console.log('ngOnInit called.');
+    this.ratingsLoaded = false;
     if (localStorage.getItem('selectedPlaylist'))
       this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
     document.body.style.backgroundImage = "url('" + this.selectedPlaylist.images[0].url + "')";

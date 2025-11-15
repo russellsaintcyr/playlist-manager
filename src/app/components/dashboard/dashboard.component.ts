@@ -10,9 +10,15 @@ import { Artist } from '../../classes/artist';
   providers: [SpotifyService],
 })
 export class DashboardComponent implements OnInit {
-  searchStr: string;
-  public artists: Array<Artist>;
+  // Injected dependencies
   private destroyRef = inject(DestroyRef);
+  private _spotifyService = inject(SpotifyService);
+
+  // Public properties
+  searchStr: string = 'foo';
+  public artists: Array<Artist>;
+
+  ngOnInit() {}
 
   keyPressed() {
     console.log(this.searchStr);
@@ -28,12 +34,6 @@ export class DashboardComponent implements OnInit {
         },
       });
   }
-
-  constructor(private _spotifyService: SpotifyService) {
-    this.searchStr = 'foo';
-  }
-
-  ngOnInit() {}
 
   showArtist(artist: Artist) {
     console.log(artist);
