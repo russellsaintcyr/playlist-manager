@@ -19,7 +19,8 @@
             "polyfills": "zone.js",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/404.html"
             ],
             "styles": [
               "src/styles.css"
@@ -57,14 +58,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "zzz:build"
+            "buildTarget": "zzz:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "zzz:build:production"
+              "buildTarget": "zzz:build:production"
             },
             "development": {
-              "browserTarget": "zzz:build:development"
+              "buildTarget": "zzz:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +73,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "zzz:build"
+            "buildTarget": "zzz:build"
           }
         },
         "test": {
@@ -125,7 +126,6 @@
       }
     }
   },
-  "defaultProject": "zzz",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "",
