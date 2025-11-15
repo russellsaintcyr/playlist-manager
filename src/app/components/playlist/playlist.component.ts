@@ -12,10 +12,9 @@ import { Router } from '@angular/router';
   selector: 'app-playlist',
   templateUrl: './playlist.component.html',
   styleUrls: ['./playlist.component.css'],
-  providers: [SpotifyService]
+  providers: [SpotifyService],
 })
 export class PlaylistComponent implements OnInit, AfterViewChecked {
-
   // private playlistID: string; //46JHZX9X1hHUpxhZCkKuS1
   public selectedPlaylist;
   public tracks: Array<MetaTrack>;
@@ -33,9 +32,11 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   private tracksLoaded: boolean;
   private offset = 0;
 
-  constructor(private _spotifyService: SpotifyService,
-              private alertService: AlertService,
-              private router: Router) {
+  constructor(
+    private _spotifyService: SpotifyService,
+    private alertService: AlertService,
+    private router: Router
+  ) {
     this.ratingsLoaded = false;
   }
 
@@ -56,27 +57,29 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     // console.log('ngOnInit called.');
-    if (localStorage.getItem('selectedPlaylist')) this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
-    document.body.style.backgroundImage = 'url(\'' + this.selectedPlaylist.images[0].url + '\')';
+    if (localStorage.getItem('selectedPlaylist'))
+      this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
+    document.body.style.backgroundImage = "url('" + this.selectedPlaylist.images[0].url + "')";
     this.loadPlaylist();
     // this.ratingSystem = (localStorage.getItem('ratingSystem') !== null) ? localStorage.getItem('ratingSystem') : 'STARS';
   }
 
   loadPlaylist() {
-    this._spotifyService.getPlaylist(this.selectedPlaylist, 0).subscribe(res => {
+    this._spotifyService.getPlaylist(this.selectedPlaylist, 0).subscribe(
+      (res) => {
         this.tracks = res.items;
         this.playlist = res;
         // get all the other tracks
-        if (this.playlist.total > (this.playlist.limit + this.playlist.offset)) {
+        if (this.playlist.total > this.playlist.limit + this.playlist.offset) {
           this.showAllTracks();
         } else {
           this.tracksLoaded = true;
         }
       },
-      err => {
+      (err) => {
         // console.log('Error: ' + err.statusText);
         window.open(this._spotifyService.getAuthorizeURL(), '_self');
-        throw new Error(err.statusText)
+        throw new Error(err.statusText);
       }
     );
   }
@@ -192,12 +195,13 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
 
   showAllTracks() {
     // call with offset, and then add
-    this._spotifyService.getURL(this.playlist.next).subscribe(res => {
+    this._spotifyService.getURL(this.playlist.next).subscribe(
+      (res) => {
         console.log(`Adding ${res.items.length} items to tracks array (${this.playlist.total} total).`);
         // update next URL so the offset changes
         this.playlist.next = res.next;
         // push new tracks
-        res.items.forEach(element => {
+        res.items.forEach((element) => {
           this.tracks.push(element);
         });
         // get all the other tracks
@@ -207,10 +211,10 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
           this.tracksLoaded = true;
         }
       },
-      err => {
-        throw new Error(err.statusText)
+      (err) => {
+        throw new Error(err.statusText);
       }
-    )
+    );
   }
 
   updateCounts() {
@@ -219,14 +223,15 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   }
 
   loadOffset(url) {
-    this._spotifyService.getURL(url).subscribe(res => {
+    this._spotifyService.getURL(url).subscribe(
+      (res) => {
         this.tracks = res.items;
         this.playlist = res;
       },
-      err => {
-        throw new Error(err.statusText)
+      (err) => {
+        throw new Error(err.statusText);
       }
-    )
+    );
   }
 
   playRating(rating: number, action: string) {
@@ -240,34 +245,39 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
     if (arrTracks.length > 0) {
       if (action === 'play') {
         this.alertService.info('Playing selected tracks');
-        this._spotifyService.controlPlayback({uris: arrTracks}, 'play').subscribe(res => {
+        this._spotifyService.controlPlayback({ uris: arrTracks }, 'play').subscribe(
+          (res) => {
             console.log('Playback successfully called');
           },
-          err => {
+          (err) => {
             console.error(err);
             this.alertService.error(err._body);
           }
-        )
+        );
       } else {
         this.alertService.info('Creating new playlist');
         // TODO get playlist name from user?
         const playlistName = rating + '-star Tracks';
         // first create playlist, then add tracks
-        this._spotifyService.createPlaylist({name: playlistName}).subscribe(res => {
-            this._spotifyService.addToPlaylist({uris: arrTracks}, res.id).subscribe(res2 => {
-                this.alertService.success('Created new playlist ' + playlistName + ' with ' + arrTracks.length + ' tracks.');
+        this._spotifyService.createPlaylist({ name: playlistName }).subscribe(
+          (res) => {
+            this._spotifyService.addToPlaylist({ uris: arrTracks }, res.id).subscribe(
+              (res2) => {
+                this.alertService.success(
+                  'Created new playlist ' + playlistName + ' with ' + arrTracks.length + ' tracks.'
+                );
               },
-              err => {
+              (err) => {
                 console.error(err);
                 this.alertService.error(err._body);
               }
-            )
+            );
           },
-          err => {
+          (err) => {
             console.error(err);
             this.alertService.error(err._body);
           }
-        )
+        );
       }
     } else {
       this.alertService.info('No songs assigned to this rating.');
@@ -275,32 +285,33 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   }
 
   playAllTracks() {
-    this._spotifyService.controlPlayback({context_uri: this.selectedPlaylist.uri}, 'play').subscribe(res => {
+    this._spotifyService.controlPlayback({ context_uri: this.selectedPlaylist.uri }, 'play').subscribe(
+      (res) => {
         this.alertService.success('Playing all tracks in playlist');
       },
-      err => {
+      (err) => {
         console.error(err);
         this.alertService.error(err._body);
       }
-    )
+    );
   }
 
   playTrack(track) {
     localStorage.setItem('selectedTrack', JSON.stringify(track));
     // now tell to play
-    this._spotifyService.controlPlayback({uris: [track.uri]}, 'play').subscribe(res => {
+    this._spotifyService.controlPlayback({ uris: [track.uri] }, 'play').subscribe(
+      (res) => {
         // console.log(res);
       },
-      err => {
+      (err) => {
         console.error(err);
         this.alertService.error(err._body);
       }
-    )
-  };
+    );
+  }
 
   viewArtist(artistID) {
     localStorage.setItem('artistID', artistID);
     this.router.navigateByUrl('/artist');
   }
-
 }

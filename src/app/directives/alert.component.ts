@@ -4,14 +4,12 @@ import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-alert',
-  templateUrl: 'alert.component.html'
+  templateUrl: 'alert.component.html',
 })
-
 export class AlertComponent implements OnInit {
   alerts: Alert[] = [];
 
-  constructor(private alertService: AlertService) {
-  }
+  constructor(private alertService: AlertService) {}
 
   ngOnInit() {
     this.alertService.getAlert().subscribe((alert: Alert) => {
@@ -27,7 +25,7 @@ export class AlertComponent implements OnInit {
   }
 
   removeAlert(alert: Alert) {
-    this.alerts = this.alerts.filter(x => x !== alert);
+    this.alerts = this.alerts.filter((x) => x !== alert);
   }
 
   cssClass(alert: Alert) {

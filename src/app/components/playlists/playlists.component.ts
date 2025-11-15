@@ -1,22 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { SpotifyService } from "../../services/spotify.service";
-import { AlertService } from "../../services/alert.service";
-import { Router } from "@angular/router";
+import { SpotifyService } from '../../services/spotify.service';
+import { AlertService } from '../../services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlists',
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.css'],
-  providers: [SpotifyService]
+  providers: [SpotifyService],
 })
 export class PlaylistsComponent implements OnInit {
-
   private priv: string;
   public pub: string;
   public tracks: Object;
   public playlists;
 
-  constructor(private _spotifyService: SpotifyService, private alertService: AlertService, private router: Router) {
+  constructor(
+    private _spotifyService: SpotifyService,
+    private alertService: AlertService,
+    private router: Router
+  ) {
     this.priv = 'Privy';
     this.pub = 'Pubby';
   }
@@ -46,17 +49,18 @@ export class PlaylistsComponent implements OnInit {
   }
 
   retrievePlaylists() {
-    this._spotifyService.getPlaylists().subscribe(res => {
+    this._spotifyService.getPlaylists().subscribe(
+      (res) => {
         this.playlists = res;
         localStorage.setItem('playlists', JSON.stringify(res));
       },
-      err => {
+      (err) => {
         this.alertService.warn('Error retrieving playlists: ' + err.statusText);
         this.alertService.info('Re-authorizing Spotify token in 2 seconds...');
         let intervalId = setInterval(() => this.reAuthorize(intervalId), 2000);
         // throw new Error(err.statusText);
       }
-    )
+    );
   }
 
   setPlaylist(playlist) {
@@ -66,27 +70,28 @@ export class PlaylistsComponent implements OnInit {
   }
 
   loadOffset(url) {
-    this._spotifyService.getURL(url).subscribe(res => {
+    this._spotifyService.getURL(url).subscribe(
+      (res) => {
         this.playlists = res;
         localStorage.setItem('playlists', JSON.stringify(res));
       },
-      err => {
-        throw new Error(err.statusText)
+      (err) => {
+        throw new Error(err.statusText);
       }
-    )
+    );
   }
 
   showPlaylist(offset) {
-    this._spotifyService.getPlaylist('46JHZX9X1hHUpxhZCkKuS1', offset).subscribe(res => {
+    this._spotifyService.getPlaylist('46JHZX9X1hHUpxhZCkKuS1', offset).subscribe(
+      (res) => {
         console.log(res);
         this.tracks = res.items;
         localStorage.setItem('tracks-' + offset, JSON.stringify(res.items));
       },
-      err => {
+      (err) => {
         // console.log('Error: ' + err.statusText);
-        throw new Error(err.statusText)
+        throw new Error(err.statusText);
       }
-    )
+    );
   }
-
 }

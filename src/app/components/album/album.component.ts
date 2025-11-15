@@ -7,14 +7,16 @@ import { Router } from '@angular/router';
   selector: 'app-album',
   templateUrl: './album.component.html',
   styleUrls: ['./album.component.css'],
-  providers: [SpotifyService]
+  providers: [SpotifyService],
 })
 export class AlbumComponent implements OnInit {
   public album: any;
 
-  constructor(private spotifyService: SpotifyService, private alertService: AlertService, private router: Router) {
-
-  }
+  constructor(
+    private spotifyService: SpotifyService,
+    private alertService: AlertService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     if (localStorage.getItem('albumID') === null) {
@@ -22,14 +24,16 @@ export class AlbumComponent implements OnInit {
     } else {
       const albumID = localStorage.getItem('albumID');
       if (albumID) {
-        this.spotifyService.getAlbum(albumID).subscribe(response => {
-          this.album = response;
-          // console.log(this.album);
-        }, err => {
-          console.error(err);
-          this.alertService.error(err._body);
-        }
-        )
+        this.spotifyService.getAlbum(albumID).subscribe(
+          (response) => {
+            this.album = response;
+            // console.log(this.album);
+          },
+          (err) => {
+            console.error(err);
+            this.alertService.error(err._body);
+          }
+        );
       }
     }
   }

@@ -6,5 +6,4 @@ export class Rating {
     this.trackURI = trackURI;
     this.rating = rating;
   }
-
 }

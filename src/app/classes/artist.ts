@@ -9,5 +9,4 @@ export class Artist {
     this.name = name;
     this.id = id;
   }
-
 }

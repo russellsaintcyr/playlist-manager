@@ -2,7 +2,6 @@ import { ErrorHandler, Injectable } from '@angular/core';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-
   handleError(error: any): void {
     // console.log('GlobalErrorHandler handleError', error);
     if (error.message === 'Unauthorized') {
@@ -14,5 +13,4 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
     // throw new Error(error.message);
   }
-
 }

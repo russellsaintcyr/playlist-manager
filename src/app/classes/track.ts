@@ -1,5 +1,5 @@
-import {Artist} from './artist';
-import {Album} from './album';
+import { Artist } from './artist';
+import { Album } from './album';
 
 export class Track {
   public uri: string;
@@ -19,8 +19,21 @@ export class Track {
   public is_playing: boolean;
   public artists: Artist[];
 
-  constructor(uri: string, name: string, cover: string, albumName: string, mainArtist: string, id: string, progress_ms: number, duration_ms: number,
-              is_playing: boolean, albumYear: Date, albumID: string, mainArtistID: string, artists: Artist[]) {
+  constructor(
+    uri: string,
+    name: string,
+    cover: string,
+    albumName: string,
+    mainArtist: string,
+    id: string,
+    progress_ms: number,
+    duration_ms: number,
+    is_playing: boolean,
+    albumYear: Date,
+    albumID: string,
+    mainArtistID: string,
+    artists: Artist[]
+  ) {
     this.uri = uri;
     this.name = name;
     this.coverImage = cover;

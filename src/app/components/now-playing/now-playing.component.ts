@@ -10,11 +10,9 @@ import { Artist } from '../../classes/artist';
   selector: 'app-now-playing',
   templateUrl: './now-playing.component.html',
   styleUrls: ['./now-playing.component.css'],
-  providers: [SpotifyService]
+  providers: [SpotifyService],
 })
-
 export class NowPlayingComponent implements OnInit {
-
   // private spotifyService: SpotifyService;
   // private alertService: AlertService;
   // private static spotifyService: SpotifyService;
@@ -42,19 +40,27 @@ export class NowPlayingComponent implements OnInit {
     const cssSelected = 'glyphicon glyphicon-star star-selected nowPlaying';
     const cssUnSelected = 'glyphicon glyphicon-star star-unselected nowPlaying';
     if (document.getElementById('star1-' + trackID) !== null) {
-      (document.getElementById('star1-' + trackID) as HTMLElement).className = (rating >= 1) ? cssSelected : cssUnSelected;
-      (document.getElementById('star2-' + trackID) as HTMLElement).className = (rating >= 2) ? cssSelected : cssUnSelected;
-      (document.getElementById('star3-' + trackID) as HTMLElement).className = (rating >= 3) ? cssSelected : cssUnSelected;
-      (document.getElementById('star4-' + trackID) as HTMLElement).className = (rating >= 4) ? cssSelected : cssUnSelected;
-      (document.getElementById('star5-' + trackID) as HTMLElement).className = (rating === 5) ? cssSelected : cssUnSelected;
+      (document.getElementById('star1-' + trackID) as HTMLElement).className =
+        rating >= 1 ? cssSelected : cssUnSelected;
+      (document.getElementById('star2-' + trackID) as HTMLElement).className =
+        rating >= 2 ? cssSelected : cssUnSelected;
+      (document.getElementById('star3-' + trackID) as HTMLElement).className =
+        rating >= 3 ? cssSelected : cssUnSelected;
+      (document.getElementById('star4-' + trackID) as HTMLElement).className =
+        rating >= 4 ? cssSelected : cssUnSelected;
+      (document.getElementById('star5-' + trackID) as HTMLElement).className =
+        rating === 5 ? cssSelected : cssUnSelected;
     } else {
-
       // console.log('Failed to get element with ID star1-' + trackID + '. Retrying in 1 second.');
       const intervalId2: number = setInterval(() => this.showStars(rating, trackID, intervalId2), 1000);
     }
   }
 
-  constructor(private spotifyService: SpotifyService, private alertService: AlertService, private router: Router) {
+  constructor(
+    private spotifyService: SpotifyService,
+    private alertService: AlertService,
+    private router: Router
+  ) {
     console.log('NowPlayingComponent constructor called');
   }
 
@@ -69,16 +75,17 @@ export class NowPlayingComponent implements OnInit {
       if (localStorage.getItem('ratings')) this.ratings = JSON.parse(localStorage.getItem('ratings')!);
       console.log('ngOnInit - Loaded ' + this.ratings.length + ' ratings from local data.');
     }
-    if (localStorage.getItem('selectedPlaylist')) this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
+    if (localStorage.getItem('selectedPlaylist'))
+      this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
     // reload in X seconds
-    console.log('ngOnInit - Reloading now playing page in ' + (this.refreshPeriod / 1000) + ' seconds.')
+    console.log('ngOnInit - Reloading now playing page in ' + this.refreshPeriod / 1000 + ' seconds.');
     this.timerRefresh = setTimeout(function () {
       location.reload();
     }, this.refreshPeriod);
   }
 
   ngOnDestroy() {
-    console.log('Clearing timers')
+    console.log('Clearing timers');
     clearTimeout(this.timerRefresh);
     clearTimeout(this.timerProgressBar);
   }
@@ -86,18 +93,19 @@ export class NowPlayingComponent implements OnInit {
   computeTime(obj) {
     // console.log(this.adjusted_progress_ms);
     obj.used_ms += 1000;
-    this.adjusted_progress_ms = (this.initial_progress_ms + this.used_ms);
+    this.adjusted_progress_ms = this.initial_progress_ms + this.used_ms;
     this.timerProgressBar = setTimeout(function () {
       obj.computeTime(obj);
     }, 1000);
   }
 
   getCurrentlyPlaying(intervalId) {
-    this.spotifyService.getCurrentlyPlaying().subscribe(response => {
+    this.spotifyService.getCurrentlyPlaying().subscribe(
+      (response) => {
         // console.log('getCurrentlyPlaying response:', response);
         // console.log(response);
         if (response === null || response.item === null) {
-          this.alertService.warn('No track is currently playing.')
+          this.alertService.warn('No track is currently playing.');
         } else {
           // store last track if there is one
           if (this.track !== undefined) {
@@ -105,10 +113,22 @@ export class NowPlayingComponent implements OnInit {
           }
           // first image in array is largest
           const artists: Artist[] = [];
-          response.item.artists.forEach(element => artists.push(new Artist(element.name, element.id)));
-          this.track = new Track(response.item.uri, response.item.name, response.item.album.images[0].url, response.item.album.name, response.item.artists[0].name,
-            response.item.id, response.progress_ms, response.item.duration_ms, response.is_playing, response.item.album.release_date, response.item.album.id,
-            response.item.artists[0].id, artists);
+          response.item.artists.forEach((element) => artists.push(new Artist(element.name, element.id)));
+          this.track = new Track(
+            response.item.uri,
+            response.item.name,
+            response.item.album.images[0].url,
+            response.item.album.name,
+            response.item.artists[0].name,
+            response.item.id,
+            response.progress_ms,
+            response.item.duration_ms,
+            response.is_playing,
+            response.item.album.release_date,
+            response.item.album.id,
+            response.item.artists[0].id,
+            artists
+          );
           // console.log(this.track);
           // set playback times, and call loop
           this.used_ms = 0;
@@ -117,7 +137,7 @@ export class NowPlayingComponent implements OnInit {
             this.computeTime(this);
           }
           // images
-          document.body.style.backgroundImage = 'url(\'' + response.item.album.images[0].url + '\')';
+          document.body.style.backgroundImage = "url('" + response.item.album.images[0].url + "')";
           if (intervalId !== null) {
             clearInterval(intervalId);
           }
@@ -141,13 +161,13 @@ export class NowPlayingComponent implements OnInit {
         }
         this.loadingTrack = false;
       },
-      err => {
+      (err) => {
         this.alertService.warn('Error loading now playing. ' + err.statusText);
         // throw new Error(err.statusText);
         window.open(this.spotifyService.getAuthorizeURL(), '_self');
         this.loadingTrack = false;
       }
-    )
+    );
   }
 
   setRating(rating: number, track: Track) {
@@ -177,39 +197,42 @@ export class NowPlayingComponent implements OnInit {
 
   playNextPrevious(direction: string) {
     this.loadingTrack = true;
-    this.spotifyService.playNextPrevious(direction).subscribe(res => {
+    this.spotifyService.playNextPrevious(direction).subscribe(
+      (res) => {
         // update track
         const intervalId = setInterval(() => this.getCurrentlyPlaying(intervalId), 1500);
       },
-      err => {
+      (err) => {
         console.error(err);
         this.alertService.error(err._body);
       }
-    )
+    );
   }
 
   stop() {
-    this.spotifyService.controlPlayback(null, 'pause').subscribe(res => {
+    this.spotifyService.controlPlayback(null, 'pause').subscribe(
+      (res) => {
         this.track.is_playing = false;
         clearTimeout(this.timerProgressBar);
       },
-      err => {
+      (err) => {
         console.error(err);
         this.alertService.error(err._body);
       }
-    )
+    );
   }
 
   play() {
-    this.spotifyService.controlPlayback(null, 'play').subscribe(res => {
+    this.spotifyService.controlPlayback(null, 'play').subscribe(
+      (res) => {
         this.track.is_playing = true;
         this.computeTime(this);
       },
-      err => {
+      (err) => {
         console.error(err);
         this.alertService.error(err._body);
       }
-    )
+    );
   }
 
   viewAlbum() {

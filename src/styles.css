@@ -1,11 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic');
 
 /*$icon-font-path =         "bootstrap/fonts/";*/
 /*@import bootstrap;*/
 
-@import "assets/styles/bootstrap.css";
-@import "assets/styles/bootstrap.darkly.css";
+@import 'assets/styles/bootstrap.css';
+@import 'assets/styles/bootstrap.darkly.css';
 /*body {*/
 /*padding-top: 5rem;*/
 /*}*/

@@ -38,26 +38,20 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     NowPlayingComponent,
     StatsComponent,
     AlbumComponent,
-    ArtistComponent
+    ArtistComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [
     {
       provide: ErrorHandler,
-      useClass: GlobalErrorHandler
+      useClass: GlobalErrorHandler,
     },
-    { 
+    {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
+      useClass: HashLocationStrategy,
     },
-    AlertService
+    AlertService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

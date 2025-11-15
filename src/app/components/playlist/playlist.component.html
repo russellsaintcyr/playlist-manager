@@ -1,30 +1,28 @@
 <!--<meta http-equiv="refresh" content="3600">-->
-<div *ngIf="selectedPlaylist === undefined">
-  selectedPlaylist is undefined
-</div>
+<div *ngIf="selectedPlaylist === undefined">selectedPlaylist is undefined</div>
 
-<div *ngIf="selectedPlaylist === null">
-  selectedPlaylist is null
-</div>
+<div *ngIf="selectedPlaylist === null">selectedPlaylist is null</div>
 
 <div *ngIf="selectedPlaylist !== undefined && selectedPlaylist !== null">
   <h2>{{ selectedPlaylist.name }}</h2>
-  <img src="{{selectedPlaylist.images[0]?.url}}" class="img-responsive">
+  <img src="{{ selectedPlaylist.images[0]?.url }}" class="img-responsive" />
   <!--<h5>No. of Tracks: {{selectedPlaylist.tracks.total}}</h5>-->
   {{ stars0 }} Unrated
-  <a href="javascript:void(0)" (click)="playRating(0, 'play')">
-    Play <i class="glyphicon glyphicon-play"></i>
-  </a>
-  <a href="javascript:void(0)" (click)="playRating(0, 'createPlaylist')">Create Playlist <i class="glyphicon glyphicon-file"></i></a>
-  <br>
+  <a href="javascript:void(0)" (click)="playRating(0, 'play')"> Play <i class="glyphicon glyphicon-play"></i> </a>
+  <a href="javascript:void(0)" (click)="playRating(0, 'createPlaylist')"
+    >Create Playlist <i class="glyphicon glyphicon-file"></i
+  ></a>
+  <br />
   {{ stars3 }}
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'THUMBS'" class="glyphicon glyphicon-thumbs-down"></i>
   <a href="javascript:void(0)" (click)="playRating(3, 'play')">Play <i class="glyphicon glyphicon-play"></i></a>
-  <a href="javascript:void(0)" (click)="playRating(3, 'createPlaylist')">Create Playlist <i class="glyphicon glyphicon-file"></i></a>
-  <br>
+  <a href="javascript:void(0)" (click)="playRating(3, 'createPlaylist')"
+    >Create Playlist <i class="glyphicon glyphicon-file"></i
+  ></a>
+  <br />
   {{ stars4 }}
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
@@ -32,8 +30,10 @@
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'THUMBS'" class="glyphicon glyphicon-hand-right"></i>
   <a href="javascript:void(0)" (click)="playRating(4, 'play')">Play <i class="glyphicon glyphicon-play"></i></a>
-  <a href="javascript:void(0)" (click)="playRating(4, 'createPlaylist')">Create Playlist <i class="glyphicon glyphicon-file"></i></a>
-  <br>
+  <a href="javascript:void(0)" (click)="playRating(4, 'createPlaylist')"
+    >Create Playlist <i class="glyphicon glyphicon-file"></i
+  ></a>
+  <br />
   {{ stars5 }}
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
@@ -42,17 +42,14 @@
   <i *ngIf="ratingSystem === 'STARS'" class="glyphicon glyphicon-star"></i>
   <i *ngIf="ratingSystem === 'THUMBS'" class="glyphicon glyphicon-thumbs-up"></i>
   <a href="javascript:void(0)" (click)="playRating(5, 'play')">Play <i class="glyphicon glyphicon-play"></i></a>
-  <a href="javascript:void(0)" (click)="playRating(5, 'createPlaylist')">Create Playlist <i class="glyphicon glyphicon-file"></i></a>
-  <br>
-  <a href="javascript:void(0)" (click)="playAllTracks()">
-    Play All <i class="glyphicon glyphicon-play"></i>
-  </a>
-  <a href="javascript:void(0)" (click)="updateCounts()">
-    Update Counts <i class="glyphicon glyphicon-repeat"></i>
-  </a>
-  <br>
+  <a href="javascript:void(0)" (click)="playRating(5, 'createPlaylist')"
+    >Create Playlist <i class="glyphicon glyphicon-file"></i
+  ></a>
+  <br />
+  <a href="javascript:void(0)" (click)="playAllTracks()"> Play All <i class="glyphicon glyphicon-play"></i> </a>
+  <a href="javascript:void(0)" (click)="updateCounts()"> Update Counts <i class="glyphicon glyphicon-repeat"></i> </a>
+  <br />
   <a routerLink="/nowplaying">Now Playing</a>
-
 
   <!--loop through tracks-->
   <div *ngIf="tracks !== null && tracks !== undefined">
@@ -74,26 +71,38 @@
     <table>
       <tr *ngFor="let track of tracks; let i = index">
         <td>
-          <img [src]="track?.track?.album?.images?.[2]?.url" class="btn btn-success" style="margin: 5px;" (click)="playTrack(track.track)">
+          <img
+            [src]="track?.track?.album?.images?.[2]?.url"
+            class="btn btn-success"
+            style="margin: 5px"
+            (click)="playTrack(track.track)"
+          />
         </td>
         <td>
           {{ track.track.name }} - by
           <span *ngFor="let artist of track.track.artists; let i = index">
-            <a (click)="viewArtist(artist.id)" [routerLink]="">{{ artist.name }}</a><span *ngIf="i < track.track.artists.length - 1">, </span>
+            <a (click)="viewArtist(artist.id)" [routerLink]="">{{ artist.name }}</a
+            ><span *ngIf="i < track.track.artists.length - 1">, </span>
           </span>
-          <br>
-          <i class="glyphicon glyphicon-thumbs-down icons"
-             id="{{'THUMBS3-' + track.track.id}}"
-             [class.star-selected]="track.track.rating === 3"
-             (click)="setRating(3, track.track)"></i>
-          <i class="glyphicon glyphicon-hand-right icons"
-             id="{{'THUMBS4-' + track.track.id}}"
-             [class.star-selected]="track.track.rating === 4"
-             (click)="setRating(4, track.track)"></i>
-          <i class="glyphicon glyphicon-thumbs-up icons"
-             id="{{'THUMBS5-' + track.track.id}}"
-             [class.star-selected]="track.track.rating === 5"
-             (click)="setRating(5, track.track)"></i>
+          <br />
+          <i
+            class="glyphicon glyphicon-thumbs-down icons"
+            id="{{ 'THUMBS3-' + track.track.id }}"
+            [class.star-selected]="track.track.rating === 3"
+            (click)="setRating(3, track.track)"
+          ></i>
+          <i
+            class="glyphicon glyphicon-hand-right icons"
+            id="{{ 'THUMBS4-' + track.track.id }}"
+            [class.star-selected]="track.track.rating === 4"
+            (click)="setRating(4, track.track)"
+          ></i>
+          <i
+            class="glyphicon glyphicon-thumbs-up icons"
+            id="{{ 'THUMBS5-' + track.track.id }}"
+            [class.star-selected]="track.track.rating === 5"
+            (click)="setRating(5, track.track)"
+          ></i>
         </td>
       </tr>
     </table>
@@ -112,4 +121,3 @@
     </div>
   </div>
 </div>
-

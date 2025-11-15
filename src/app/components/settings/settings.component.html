@@ -1,20 +1,19 @@
 <form>
   <div class="form-group">
-    <label>Token
-      <input type="text" [(ngModel)]="bearerToken" name="zorg" class="form-control">
+    <label
+      >Token
+      <input type="text" [(ngModel)]="bearerToken" name="zorg" class="form-control" />
     </label>
     <button type="button" class="btn btn-default" (click)="setBearerToken()">Set Token</button>
   </div>
 </form>
-<div *ngIf="bearerToken === null">
-  No bearerToken found in local storage.
-</div>
+<div *ngIf="bearerToken === null">No bearerToken found in local storage.</div>
 
-<hr>
+<hr />
 <app-stats></app-stats>
 <a (click)="clearRatings()" href="javascript:void(0)" class="btn btn-danger">Clear ratings</a>
 
-<hr>
+<hr />
 <app-login></app-login>
 
 <!--<hr>-->

@@ -1,4 +1,4 @@
-import {Track} from "./track";
+import { Track } from './track';
 
 export class MetaTrack {
   public is_local: boolean;

@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+dist/
+.angular/
+
+# Build outputs
+*.bundle.js
+*.bundle.css
+
+# Third-party
+src/assets/scripts/
+src/assets/styles/bootstrap.css
+src/assets/styles/bootstrap.darkly.css

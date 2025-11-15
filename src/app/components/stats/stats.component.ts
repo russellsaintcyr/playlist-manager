@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Rating } from "../../classes/rating";
+import { Rating } from '../../classes/rating';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.css']
+  styleUrls: ['./stats.component.css'],
 })
 export class StatsComponent implements OnInit {
-
   public ratings: Array<Rating> | null = [];
   public stars1 = 0;
   public stars2 = 0;
@@ -15,8 +14,7 @@ export class StatsComponent implements OnInit {
   public stars4 = 0;
   public stars5 = 0;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.ratings = localStorage.getItem('ratings') ? JSON.parse(localStorage.getItem('ratings')!) : [];
@@ -32,5 +30,4 @@ export class StatsComponent implements OnInit {
       }
     }
   }
-
 }

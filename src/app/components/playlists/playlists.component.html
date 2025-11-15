@@ -1,8 +1,8 @@
 <div *ngIf="playlists !== null">
-  Showing {{playlists.offset}} to
-  <span *ngIf="playlists.next !== null">{{(playlists.limit+playlists.offset)}}</span>
-  <span *ngIf="playlists.next === null">{{playlists.total}}</span>
-  of {{playlists.total}} playlists.
+  Showing {{ playlists.offset }} to
+  <span *ngIf="playlists.next !== null">{{ playlists.limit + playlists.offset }}</span>
+  <span *ngIf="playlists.next === null">{{ playlists.total }}</span>
+  of {{ playlists.total }} playlists.
   <div *ngIf="playlists.previous !== null">
     <a (click)="loadOffset(playlists.previous)" href="javascript:void(0)">Previous</a>
   </div>
@@ -11,10 +11,10 @@
   </div>
   <ol>
     <li *ngFor="let playlist of playlists.items; let i = index">
-      <button class="btn btn-success" (click)="setPlaylist(playlist)" style="margin: 5px;">
-        <img src="{{playlist.images[0].url}}" width="50" height="50">
+      <button class="btn btn-success" (click)="setPlaylist(playlist)" style="margin: 5px">
+        <img src="{{ playlist.images[0].url }}" width="50" height="50" />
       </button>
-      <a (click)="setPlaylist(playlist)" href="javascript:void(0)">{{playlist.name}}</a>
+      <a (click)="setPlaylist(playlist)" href="javascript:void(0)">{{ playlist.name }}</a>
     </li>
   </ol>
 </div>
@@ -22,4 +22,4 @@
 <div>
   <a (click)="refreshPlaylists()" href="javascript:void(0)">Refresh playlists</a>
 </div>
-<br><br><br>
+<br /><br /><br />

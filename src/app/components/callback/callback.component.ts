@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {Location, LocationStrategy, PathLocationStrategy} from "@angular/common";
+import { Router } from '@angular/router';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 @Component({
   selector: 'callback',
   templateUrl: './callback.component.html',
   styleUrls: ['./callback.component.css'],
-  providers: [Location, {provide: LocationStrategy, useClass: PathLocationStrategy}]
+  providers: [Location, { provide: LocationStrategy, useClass: PathLocationStrategy }],
 })
 export class CallbackComponent implements OnInit {
-
   public accessToken: string | undefined;
   public tokenType: string | undefined;
   public expiresIn: string | undefined;
   public queryStringArray: Array<string>;
 
-  constructor(private location: Location, private router: Router) {
+  constructor(
+    private location: Location,
+    private router: Router
+  ) {
     console.log('CallbackComponent constructor');
     const queryString = this.location.path(true).substring(10);
     this.queryStringArray = queryString.split('&');
@@ -48,5 +50,4 @@ export class CallbackComponent implements OnInit {
       this.router.navigateByUrl('/' + savedState);
     }
   }
-
 }

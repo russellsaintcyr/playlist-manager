@@ -1,7 +1,14 @@
 <form (ngSubmit)="keyPressed()">
   <div class="form-group">
-    <input type="text" [(ngModel)]="searchStr" title="Yo" id="xx" name="zorg" placeholder="Enter search string"
-      class="form-control">
+    <input
+      type="text"
+      [(ngModel)]="searchStr"
+      title="Yo"
+      id="xx"
+      name="zorg"
+      placeholder="Enter search string"
+      class="form-control"
+    />
   </div>
   <button type="submit" class="btn btn-success">Search Artist</button>
 </form>
@@ -11,13 +18,15 @@
   <table>
     <tr *ngFor="let artist of artists; let i = index">
       <td>
-        {{i+1}}
-        <img [src]="artist?.images?.[2]?.url" style="margin: 5px; width: 80px" (click)="showArtist(artist)"
-          alt="Artist image">
+        {{ i + 1 }}
+        <img
+          [src]="artist?.images?.[2]?.url"
+          style="margin: 5px; width: 80px"
+          (click)="showArtist(artist)"
+          alt="Artist image"
+        />
       </td>
-      <td>
-        {{artist.name}} - {{artist.id}}
-      </td>
+      <td>{{ artist.name }} - {{ artist.id }}</td>
     </tr>
   </table>
 </div>

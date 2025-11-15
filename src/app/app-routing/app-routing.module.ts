@@ -14,58 +14,53 @@ import { ArtistComponent } from '../components/artist/artist.component';
 const routes: Routes = [
   {
     path: '',
-    component: PlaylistsComponent
+    component: PlaylistsComponent,
   },
   {
     path: 'artist',
-    component: ArtistComponent
+    component: ArtistComponent,
   },
   {
     path: 'album',
-    component: AlbumComponent
+    component: AlbumComponent,
   },
   {
     path: 'search',
-    component: DashboardComponent
+    component: DashboardComponent,
   },
   {
     path: 'playlists',
-    component: PlaylistsComponent
+    component: PlaylistsComponent,
   },
   {
     path: 'playlist',
-    component: PlaylistComponent
+    component: PlaylistComponent,
   },
   {
     path: 'nowplaying',
-    component: NowPlayingComponent
+    component: NowPlayingComponent,
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'settings',
-    component: SettingsComponent
+    component: SettingsComponent,
   },
   {
     path: 'stats',
-    component: StatsComponent
+    component: StatsComponent,
   },
   {
     path: 'callback',
-    component: CallbackComponent
-  }
+    component: CallbackComponent,
+  },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes)
-  ],
-  exports: [
-    RouterModule
-  ],
-  declarations: []
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  declarations: [],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}
