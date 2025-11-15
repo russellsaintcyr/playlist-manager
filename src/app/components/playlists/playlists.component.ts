@@ -27,7 +27,7 @@ export class PlaylistsComponent implements OnInit {
       this.retrievePlaylists();
       this.alertService.info('Retrieved playlists.');
     } else {
-      this.playlists = JSON.parse(localStorage.getItem('playlists'));
+      if (localStorage.getItem('playlists')) this.playlists = JSON.parse(localStorage.getItem('playlists')!);
       this.alertService.info('Loaded playlists from local data.');
     }
   }

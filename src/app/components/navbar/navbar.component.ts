@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SpotifyService} from "../../services/spotify.service";
 import {AlertService} from "../../services/alert.service";
+import {Playlist} from "../../classes/playlist";
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,7 @@ import {AlertService} from "../../services/alert.service";
 export class NavbarComponent implements OnInit {
 
   public isPlaying: boolean;
-  public selectedPlaylist;
+  public selectedPlaylist: Playlist | undefined;
 
   constructor(private spotifyService: SpotifyService, private alertService: AlertService) {
     // console.log('getting currently playing.');
@@ -31,7 +32,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist'));
+    this.selectedPlaylist = localStorage.getItem('selectedPlaylist') ? JSON.parse(localStorage.getItem('selectedPlaylist')!) : undefined;
   }
 
   playNextPrevious(direction:string) {

@@ -10,9 +10,9 @@ import {Location, LocationStrategy, PathLocationStrategy} from "@angular/common"
 })
 export class CallbackComponent implements OnInit {
 
-  public accessToken: string;
-  public tokenType: string;
-  public expiresIn: string;
+  public accessToken: string | undefined;
+  public tokenType: string | undefined;
+  public expiresIn: string | undefined;
   public queryStringArray: Array<string>;
 
   constructor(private location: Location, private router: Router) {
@@ -21,7 +21,7 @@ export class CallbackComponent implements OnInit {
     this.queryStringArray = queryString.split('&');
   }
 
-  getQueryVariable(variable) {
+  getQueryVariable(variable): string | undefined {
     for (let i = 0; i < this.queryStringArray.length; i++) {
       const pair = this.queryStringArray[i].split('=');
       if (decodeURIComponent(pair[0]) == variable) {
@@ -29,6 +29,7 @@ export class CallbackComponent implements OnInit {
       }
     }
     console.log('Query variable %s not found', variable);
+    return undefined;
   }
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class CallbackComponent implements OnInit {
     this.tokenType = this.getQueryVariable('token_type');
     this.expiresIn = this.getQueryVariable('expires_in');
     // set token
-    localStorage.setItem('bearerToken', this.accessToken);
+    if (this.accessToken) localStorage.setItem('bearerToken', this.accessToken);
     console.log('CallbackComponent Updated bearerToken locally', this.accessToken);
     // redirect
     const savedState = localStorage.getItem('savedState');

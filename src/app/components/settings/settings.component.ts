@@ -10,7 +10,7 @@ import {AppSettings} from '../../../appSettings';
 export class SettingsComponent implements OnInit {
 
   public ratingSystem = 'THUMBS';
-  public bearerToken: string;
+  public bearerToken: string | null;
 
   constructor(private alertService: AlertService) {
     this.bearerToken = localStorage.getItem('bearerToken');
@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
   }
 
   setBearerToken() {
-    localStorage.setItem('bearerToken', this.bearerToken);
+    if (this.bearerToken) localStorage.setItem('bearerToken', this.bearerToken);
     console.log('Updated local storage.' + this.bearerToken);
   }
 

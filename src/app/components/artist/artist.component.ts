@@ -11,13 +11,13 @@ import {Router} from '@angular/router';
 })
 export class ArtistComponent implements OnInit {
 
-  private artistID: string;
-
+  private artistID: string | null;
   public artist: any;
   public albums: any;
 
-  constructor(private spotifyService: SpotifyService, private alertService: AlertService, private router: Router) {
-
+  constructor(private spotifyService: SpotifyService, 
+    private alertService: AlertService, 
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -25,13 +25,17 @@ export class ArtistComponent implements OnInit {
       this.alertService.error('No artistID found in local storage.');
     } else {
       this.artistID = localStorage.getItem('artistID');
-      this.getArtistDetails();
-      this.getArtistAlbumDetails();
+      if (this.artistID) {
+        this.getArtistDetails();
+        this.getArtistAlbumDetails();
+      } else {
+        this.alertService.error('artistID is null.');
+      }
     }
   }
 
   getArtistDetails() {
-    this.spotifyService.getArtist(this.artistID).subscribe(response => {
+    this.spotifyService.getArtist(this.artistID!).subscribe(response => {
         this.artist = response;
         console.log(this.artist);
       }, err => {
@@ -42,7 +46,7 @@ export class ArtistComponent implements OnInit {
   }
 
   getArtistAlbumDetails() {
-    this.spotifyService.getArtistAlbums(this.artistID).subscribe(response => {
+    this.spotifyService.getArtistAlbums(this.artistID!).subscribe(response => {
         this.albums = response.items;
         // console.log(this.albums);
       }, err => {

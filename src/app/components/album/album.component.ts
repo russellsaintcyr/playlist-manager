@@ -21,14 +21,16 @@ export class AlbumComponent implements OnInit {
       this.alertService.error('No albumID found in local storage.');
     } else {
       const albumID = localStorage.getItem('albumID');
-      this.spotifyService.getAlbum(albumID).subscribe(response => {
+      if (albumID) {
+        this.spotifyService.getAlbum(albumID).subscribe(response => {
           this.album = response;
           // console.log(this.album);
         }, err => {
           console.error(err);
           this.alertService.error(err._body);
         }
-      )
+        )
+      }
     }
   }
 

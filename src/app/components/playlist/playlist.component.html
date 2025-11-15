@@ -74,7 +74,7 @@
     <table>
       <tr *ngFor="let track of tracks; let i = index">
         <td>
-          <img src="{{track.track.album.images[2]?.url}}" class="btn btn-success" style="margin: 5px;" (click)="playTrack(track.track)">
+          <img [src]="track?.track?.album?.images?.[2]?.url" class="btn btn-success" style="margin: 5px;" (click)="playTrack(track.track)">
         </td>
         <td>
           {{ track.track.name }} - by

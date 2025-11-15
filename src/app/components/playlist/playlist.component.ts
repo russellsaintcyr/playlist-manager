@@ -56,7 +56,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     // console.log('ngOnInit called.');
-    this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist'));
+    if (localStorage.getItem('selectedPlaylist')) this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
     document.body.style.backgroundImage = 'url(\'' + this.selectedPlaylist.images[0].url + '\')';
     this.loadPlaylist();
     // this.ratingSystem = (localStorage.getItem('ratingSystem') !== null) ? localStorage.getItem('ratingSystem') : 'STARS';
@@ -88,7 +88,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
     NowPlayingComponent.showStars(rating, track.id, null);
     const newRating = new Rating(track.uri, rating);
     // search for existing rating
-    let obj = undefined;
+    let obj;
     if (this.ratings !== undefined) {
       obj = this.ratings.find(function (obj: Rating) {
         return obj.trackURI === track.uri;
@@ -144,7 +144,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
     }
     const traxx = this.tracks;
     if (localStorage.getItem('ratings') !== null) {
-      this.ratings = JSON.parse(localStorage.getItem('ratings'));
+      if (localStorage.getItem('ratings')) this.ratings = JSON.parse(localStorage.getItem('ratings')!);
       console.log('Loaded ' + this.ratings.length + ' ratings.');
       // loop through all tracks and adjust stars
       console.log(`Looping through tracks for ratings, system ${this.ratingSystem}`);
@@ -159,7 +159,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
           // console.log(`Found element ${elemName}`);
         }
         // see if have rating
-        let obj = undefined;
+        let obj;
         if (this.ratings !== undefined) {
           obj = this.ratings.find(function (obj: Rating) {
             return obj.trackURI === traxx[x].track.uri;
@@ -230,11 +230,11 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   }
 
   playRating(rating: number, action: string) {
-    const arrTracks = [];
+    const arrTracks: string[] = [];
     for (const x in this.tracks) {
       // console.log(this.tracks[x].uri + ' ' + this.tracks[x].rating);
       if (this.tracks[x].track.rating === rating) {
-        arrTracks.push(this.tracks[x].track.uri);
+        arrTracks.push(this.tracks[x]?.track?.uri);
       }
     }
     if (arrTracks.length > 0) {

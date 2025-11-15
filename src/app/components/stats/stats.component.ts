@@ -8,7 +8,7 @@ import { Rating } from "../../classes/rating";
 })
 export class StatsComponent implements OnInit {
 
-  public ratings: Array<Rating>;
+  public ratings: Array<Rating> | null = [];
   public stars1 = 0;
   public stars2 = 0;
   public stars3 = 0;
@@ -19,15 +19,17 @@ export class StatsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ratings = JSON.parse(localStorage.getItem('ratings'));
-    console.log(this.ratings.length + ' ratings found.');
-    // TODO perhaps use angular filter to get ratings instead of javascript loop
-    for (let i = 0; i < this.ratings.length; i++) {
-      if (this.ratings[i].rating === 1) this.stars1++;
-      if (this.ratings[i].rating === 2) this.stars2++;
-      if (this.ratings[i].rating === 3) this.stars3++;
-      if (this.ratings[i].rating === 4) this.stars4++;
-      if (this.ratings[i].rating === 5) this.stars5++;
+    this.ratings = localStorage.getItem('ratings') ? JSON.parse(localStorage.getItem('ratings')!) : [];
+    if (this.ratings) {
+      console.log(this.ratings.length + ' ratings found.');
+      // TODO perhaps use angular filter to get ratings instead of javascript loop
+      for (let i = 0; i < this.ratings.length; i++) {
+        if (this.ratings[i].rating === 1) this.stars1++;
+        if (this.ratings[i].rating === 2) this.stars2++;
+        if (this.ratings[i].rating === 3) this.stars3++;
+        if (this.ratings[i].rating === 4) this.stars4++;
+        if (this.ratings[i].rating === 5) this.stars5++;
+      }
     }
   }
 

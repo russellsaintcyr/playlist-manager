@@ -1,4 +1,5 @@
 import {Artist} from './artist';
+import {Album} from './album';
 
 export class Track {
   public uri: string;
@@ -10,7 +11,7 @@ export class Track {
   public mainArtist: string;
   public mainArtistID: string;
   public rating: number;
-  public album: string;
+  public album: Album;
   public albumYear: Date;
   public albumID: string;
   public progress_ms: number;

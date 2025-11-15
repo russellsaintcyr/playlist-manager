@@ -8,7 +8,7 @@ export class SpotifyService {
   private authURL: string;
   // TODO remove need for user ID
   private readonly userID: string;
-  private readonly bearerToken: string;
+  private readonly bearerToken: string | null;
   private readonly callbackRedirectURI: string;
   private readonly headers;
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
 import { Track } from '../../classes/track';
-import { Rating } from 'app/classes/rating';
+import { Rating } from '../../classes/rating';
 import { Router } from '@angular/router';
 import { Artist } from '../../classes/artist';
 
@@ -20,8 +20,8 @@ export class NowPlayingComponent implements OnInit {
   // private static spotifyService: SpotifyService;
   // private static alertService: AlertService;
 
-  private timerRefresh;
-  private timerProgressBar;
+  private timerRefresh: number;
+  private timerProgressBar: number;
   private refreshPeriod = 60000;
   private initial_progress_ms: number;
   private used_ms = 0;
@@ -42,15 +42,15 @@ export class NowPlayingComponent implements OnInit {
     const cssSelected = 'glyphicon glyphicon-star star-selected nowPlaying';
     const cssUnSelected = 'glyphicon glyphicon-star star-unselected nowPlaying';
     if (document.getElementById('star1-' + trackID) !== null) {
-      document.getElementById('star1-' + trackID).className = (rating >= 1) ? cssSelected : cssUnSelected;
-      document.getElementById('star2-' + trackID).className = (rating >= 2) ? cssSelected : cssUnSelected;
-      document.getElementById('star3-' + trackID).className = (rating >= 3) ? cssSelected : cssUnSelected;
-      document.getElementById('star4-' + trackID).className = (rating >= 4) ? cssSelected : cssUnSelected;
-      document.getElementById('star5-' + trackID).className = (rating === 5) ? cssSelected : cssUnSelected;
+      (document.getElementById('star1-' + trackID) as HTMLElement).className = (rating >= 1) ? cssSelected : cssUnSelected;
+      (document.getElementById('star2-' + trackID) as HTMLElement).className = (rating >= 2) ? cssSelected : cssUnSelected;
+      (document.getElementById('star3-' + trackID) as HTMLElement).className = (rating >= 3) ? cssSelected : cssUnSelected;
+      (document.getElementById('star4-' + trackID) as HTMLElement).className = (rating >= 4) ? cssSelected : cssUnSelected;
+      (document.getElementById('star5-' + trackID) as HTMLElement).className = (rating === 5) ? cssSelected : cssUnSelected;
     } else {
 
       // console.log('Failed to get element with ID star1-' + trackID + '. Retrying in 1 second.');
-      const intervalId2: NodeJS.Timer = setInterval(() => this.showStars(rating, trackID, intervalId2), 1000);
+      const intervalId2: number = setInterval(() => this.showStars(rating, trackID, intervalId2), 1000);
     }
   }
 
@@ -66,10 +66,10 @@ export class NowPlayingComponent implements OnInit {
       this.ratings = [];
       localStorage.setItem('ratings', JSON.stringify(this.ratings));
     } else {
-      this.ratings = JSON.parse(localStorage.getItem('ratings'));
+      if (localStorage.getItem('ratings')) this.ratings = JSON.parse(localStorage.getItem('ratings')!);
       console.log('ngOnInit - Loaded ' + this.ratings.length + ' ratings from local data.');
     }
-    this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist'));
+    if (localStorage.getItem('selectedPlaylist')) this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
     // reload in X seconds
     console.log('ngOnInit - Reloading now playing page in ' + (this.refreshPeriod / 1000) + ' seconds.')
     this.timerRefresh = setTimeout(function () {
@@ -104,7 +104,7 @@ export class NowPlayingComponent implements OnInit {
             this.lastTrack = this.track;
           }
           // first image in array is largest
-          const artists = [];
+          const artists: Artist[] = [];
           response.item.artists.forEach(element => artists.push(new Artist(element.name, element.id)));
           this.track = new Track(response.item.uri, response.item.name, response.item.album.images[0].url, response.item.album.name, response.item.artists[0].name,
             response.item.id, response.progress_ms, response.item.duration_ms, response.is_playing, response.item.album.release_date, response.item.album.id,
