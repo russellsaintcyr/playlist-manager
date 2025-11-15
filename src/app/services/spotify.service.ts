@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class SpotifyService {
@@ -20,15 +21,11 @@ export class SpotifyService {
     // TODO remove hard-coded user ID
     this.userID = 'x1111x';
     this.bearerToken = localStorage.getItem('bearerToken');
-    // console.log(`location.hostname: ${location.hostname}`);
-    // console.log(`location.host: ${location.host}`);
-    // console.log(`location.href: ${location.href}`);
-    this.callbackRedirectURI = location.host.includes('github')
-      ? location.href + 'callback'
-      : `http://${location.host}/#/callback`;
+    // console.log(`location`, location);
+    this.callbackRedirectURI = `${location.origin}${location.pathname}#/callback`;
     console.log(`callbackRedirectURI: ${this.callbackRedirectURI}`);
     this.headers = new HttpHeaders({ Authorization: 'Bearer ' + this.bearerToken });
-    console.log(`this.headers:`, this.headers);
+    // console.log(`this.headers:`, this.headers);
   }
 
   getPlaylist(playlist, offset: number): Observable<any> {
@@ -73,7 +70,7 @@ export class SpotifyService {
   }
 
   getAuthorizeURL() {
-    const client_id = 'e8629f625be5446a8434f03c0063ac27';
+    const client_id = environment.spotifyClientId;
     const response_type = 'token'; // Implicit Grant Flow https://developer.spotify.com/web-api/authorization-guide/#implicit-grant-flow
     const redirect_uri = this.callbackRedirectURI;
     const scopes =
