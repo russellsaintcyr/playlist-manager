@@ -129,6 +129,12 @@
                 }
                 <br />
                 <i
+                  class="glyphicon glyphicon-thumbs-up icons"
+                  id="{{ 'THUMBS5-' + track.track.id }}"
+                  [class.star-selected]="track.track.rating === 5"
+                  (click)="setRating(5, track.track)"
+                ></i>
+                <i
                   class="glyphicon glyphicon-thumbs-down icons"
                   id="{{ 'THUMBS3-' + track.track.id }}"
                   [class.star-selected]="track.track.rating === 3"
@@ -139,12 +145,6 @@
                   id="{{ 'THUMBS4-' + track.track.id }}"
                   [class.star-selected]="track.track.rating === 4"
                   (click)="setRating(4, track.track)"
-                ></i>
-                <i
-                  class="glyphicon glyphicon-thumbs-up icons"
-                  id="{{ 'THUMBS5-' + track.track.id }}"
-                  [class.star-selected]="track.track.rating === 5"
-                  (click)="setRating(5, track.track)"
                 ></i>
               </td>
             </tr>

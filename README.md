@@ -6,7 +6,7 @@ This passion project helped resolve a personal challenge: how to whittle down a 
 * **No** - I may like this tune, but not enough to represent my year
 * **Maybe** - A good tune, but requires further listening to decide
 
-That's the app which is in this code, which you can also try out [here](https://russellsaintcyr.github.io/playlist-manager). It accesses the Spotify API and allows users to browse and manage playlists, using the rating system that tracks votes for Yes, No and Maybe.
+That's the app which is in this code, which you can also try out [here](https://russellsaintcyr.github.io/playlist-manager). It accesses the Spotify API and allows users to browse and manage playlists, using the rating system that tracks votes for Yes, No and Maybe (thumb up, thumb down, thumb neutral)
 
 ![Now Playing](src/assets/images/now_playing.png)
 ![Now Playing](src/assets/images/2021.png)

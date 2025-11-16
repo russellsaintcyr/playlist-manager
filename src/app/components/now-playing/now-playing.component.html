@@ -6,6 +6,12 @@
       </div>
       <div class="col-md-4">
         <i
+          class="glyphicon glyphicon-thumbs-up nowPlaying"
+          id="{{ 'THUMBS5-' + track.id }}"
+          [class.star-selected]="track.rating === 5"
+          (click)="setRating(5, track)"
+        ></i>
+        <i
           class="glyphicon glyphicon-thumbs-down nowPlaying"
           id="{{ 'THUMBS3-' + track.id }}"
           [class.star-selected]="track.rating === 3"
@@ -16,12 +22,6 @@
           id="{{ 'THUMBS4-' + track.id }}"
           [class.star-selected]="track.rating === 4"
           (click)="setRating(4, track)"
-        ></i>
-        <i
-          class="glyphicon glyphicon-thumbs-up nowPlaying"
-          id="{{ 'THUMBS5-' + track.id }}"
-          [class.star-selected]="track.rating === 5"
-          (click)="setRating(5, track)"
         ></i>
         <br />
         @if (loadingTrack) {
@@ -52,7 +52,7 @@
         }
         &nbsp;{{ adjusted_progress_ms | date: 'm:ss' }}
         <br />
-        <i class="glyphicon glyphicon glyphicon-list"></i>
+        <i class="glyphicon glyphicon glyphicon-list"></i>&nbsp;
         <a routerLink="/playlist">{{ this.selectedPlaylist.name }}</a>
       </div>
       <!-- playback -->
@@ -61,17 +61,17 @@
         @if (track.is_playing) {
           <button type="button" class="btn btn-success" (click)="stop()">
             <i class="glyphicon glyphicon-stop"></i>
-          </button>
+          </button>&nbsp;
         }
         @if (!track.is_playing) {
           <button type="button" class="btn btn-success" (click)="play()">
             <i class="glyphicon glyphicon-play"></i>
-          </button>
+          </button>&nbsp;
         }
         @if (track.is_playing) {
           <button type="button" class="btn btn-success" (click)="playNextPrevious('previous')">
             <i class="glyphicon glyphicon-backward"></i>
-          </button>
+          </button>&nbsp;
         }
         @if (track.is_playing) {
           <button type="button" class="btn btn-success" (click)="playNextPrevious('next')">
