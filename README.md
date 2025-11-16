@@ -1,9 +1,15 @@
 # Playlist Manager
 
-This project started in 2017 to help me resolve a musical challenge. Each year I create a playlist of songs that I discover and like. At year end, that playlist includes 200-300 songs. I wanted a way to select my favorite 40 songs, partly a tribute to American Top 40 and Kasey Kasem. Spotify offers no way to rate tracks, and it was frustrating manually adding songs to a new Top 40 Candidates playlist. I wanted an easier and fun solution. So I created a browser-based webapp which accesses the Spotify API and allows users to play, rate, and organize tracks as they listen.
+This passion project helped resolve a personal challenge: how to whittle down a yearly playlist of 200-300 songs into 40 favorites. Each December I generate a "Top Songs of My Year" playlist. This wasn't easy in Spotify, having to manually drag favorites into a new playlist. This list often still had too many songs so I had to then remove tracks to get down to 40. I thought, "There must be a better way." So I decided to build an app through which I could review playlists and mark tracks with a rating scheme like:
 
-![Now Playing](now_playing.png)
-![Now Playing](2021.png)
+* **Yes** - This song rocks and definitely should make my top 40 
+* **No** - I may like this tune, but not enough to represent my year
+* **Maybe** - A good tune, but requires further listening to decide
+
+That's the app which is in this code, which you can also try out [here](https://russellsaintcyr.github.io/playlist-manager). It accesses the Spotify API and allows users to browse and manage playlists, using the rating system that tracks votes for Yes, No and Maybe.
+
+![Now Playing](src/assets/images/now_playing.png)
+![Now Playing](src/assets/images/2021.png)
 
 ## Architecture
 * Angular 18 frontend
