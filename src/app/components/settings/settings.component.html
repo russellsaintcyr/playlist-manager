@@ -1,11 +1,19 @@
 <form>
   <div class="form-group">
     <label
-      >Token
-      <input type="text" [(ngModel)]="bearerToken" name="zorg" class="form-control" />
+      >Spotify access token
+      <textarea
+        rows="8"
+        cols="60"
+        class="form-control"
+        readonly
+        name="zorg"
+        [(ngModel)]="bearerToken"
+        ></textarea
+      >
     </label>
-    <button type="button" class="btn btn-default" (click)="setBearerToken()">Set Token</button>
   </div>
+    <button type="button" class="btn btn-default" (click)="setBearerToken()">Set Token</button>
 </form>
 @if (bearerToken === null) {
   <div>No bearerToken found in local storage.</div>
@@ -17,14 +25,3 @@
 
 <hr />
 <app-login></app-login>
-
-<!--<hr>-->
-<!--Rating system. 5/3 stars or 3 thumbs (no, yes, maybe)-->
-<!--<p>-->
-<!--  <label for="STARS">Stars 5</label>-->
-<!--  <input type="radio" name="ratingSystem" id="STARS" value="STARS" (click)="setRatingSystem('STARS')" [ngModel]="ratingSystem">-->
-<!--  <label for="STARS3">Stars 3</label>-->
-<!--  <input type="radio" name="ratingSystem" id="STARS3" value="STARS3" (click)="setRatingSystem('STARS3')" [ngModel]="ratingSystem">-->
-<!--  <label for="THUMBS">Thumbs</label>-->
-<!--  <input type="radio" name="ratingSystem" id="THUMBS" value="THUMBS" (click)="setRatingSystem('THUMBS')" [ngModel]="ratingSystem">-->
-<!--</p>-->

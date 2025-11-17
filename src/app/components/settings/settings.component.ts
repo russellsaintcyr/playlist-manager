@@ -7,6 +7,7 @@ import { LoginComponent } from '../login/login.component';
 
 @Component({
     selector: 'app-settings',
+    standalone: true,
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css'],
     imports: [
@@ -38,8 +39,10 @@ export class SettingsComponent implements OnInit {
   }
 
   clearRatings() {
-    localStorage.removeItem('ratings');
-    this.alertService.success('Cleared ratings');
+    if (confirm("Are you sure you want to clear the ratings?")) {
+      localStorage.removeItem('ratings');
+      this.alertService.success('Cleared ratings');
+    }
   }
 
   setRatingSystem(ratingSystem: string) {

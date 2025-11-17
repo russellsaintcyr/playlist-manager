@@ -7,6 +7,7 @@ import { NowPlayingComponent } from '../now-playing/now-playing.component';
 import { Track } from '../../classes/track';
 import { MetaTrack } from '../../classes/metatrack';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-playlist',
@@ -259,9 +260,9 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
             next: (res) => {
               console.log('Playback successfully called');
             },
-            error: (err) => {
+            error: (err: HttpErrorResponse) => {
               console.error(err);
-              this.alertService.error(err._body);
+              this.alertService.error(err.error.error.message);
             },
           });
       } else {
@@ -281,15 +282,15 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
                       'Created new playlist ' + playlistName + ' with ' + arrTracks.length + ' tracks.'
                     );
                   },
-                  error: (err) => {
+                  error: (err: HttpErrorResponse) => {
                     console.error(err);
-                    this.alertService.error(err._body);
+                    this.alertService.error(err.error.error.message);
                   },
                 });
             },
             error: (err) => {
               console.error(err);
-              this.alertService.error(err._body);
+              this.alertService.error(err.error.error.message);
             },
           });
       }
@@ -305,9 +306,9 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
         next: (res) => {
           this.alertService.success('Playing all tracks in playlist');
         },
-        error: (err) => {
+        error: (err: HttpErrorResponse) => {
           console.error(err);
-          this.alertService.error(err._body);
+          this.alertService.error(err.error.error.message);
         },
       });
   }
@@ -321,9 +322,9 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
         next: (res) => {
           // console.log(res);
         },
-        error: (err) => {
+        error: (err: HttpErrorResponse) => {
           console.error(err);
-          this.alertService.error(err._body);
+          this.alertService.error(err.error.error.message);
         },
       });
   }

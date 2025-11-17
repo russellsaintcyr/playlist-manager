@@ -4,10 +4,10 @@ import { AlertService } from '../../services/alert.service';
 
 @Component({
     selector: 'app-login',
+    standalone: true,
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
     providers: [SpotifyService],
-    standalone: true,
 })
 export class LoginComponent implements OnInit {
   constructor(

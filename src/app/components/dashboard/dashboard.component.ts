@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
   private _spotifyService = inject(SpotifyService);
 
   // Public properties
-  searchStr: string = 'foo';
+  searchStr: string = '';
   public artists: Array<Artist>;
 
   ngOnInit() {}

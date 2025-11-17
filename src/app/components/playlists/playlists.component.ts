@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
     templateUrl: './playlists.component.html',
     styleUrls: ['./playlists.component.css'],
     providers: [SpotifyService],
-    standalone: true,
 })
 export class PlaylistsComponent implements OnInit {
   private priv: string;

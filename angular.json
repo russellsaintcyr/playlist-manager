@@ -131,10 +131,12 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "",
-      "style": "css"
+      "style": "css",
+      "standalone": true
     },
     "@schematics/angular:directive": {
-      "prefix": ""
+      "prefix": "",
+      "standalone": true
     }
   }
 }

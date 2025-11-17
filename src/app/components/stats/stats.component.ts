@@ -3,9 +3,9 @@ import { Rating } from '../../classes/rating';
 
 @Component({
     selector: 'app-stats',
+    standalone: true,
     templateUrl: './stats.component.html',
     styleUrls: ['./stats.component.css'],
-    standalone: true,
 })
 export class StatsComponent implements OnInit {
   public ratings: Array<Rating> | null = [];

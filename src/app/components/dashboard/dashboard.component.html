@@ -3,10 +3,9 @@
     <input
       type="text"
       [(ngModel)]="searchStr"
-      title="Yo"
-      id="xx"
-      name="zorg"
-      placeholder="Enter search string"
+      title="Artist search"
+      name="artistSearch"
+      placeholder="Enter part or all of an artist's name"
       class="form-control"
       />
   </div>
@@ -28,7 +27,7 @@
               alt="Artist image"
               />
           </td>
-          <td>{{ artist.name }} - {{ artist.id }}</td>
+          <td>{{ artist.name }}</td>
         </tr>
       }
     </table>
