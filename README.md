@@ -36,7 +36,7 @@ That's the app I wrote, which you can try out [here](https://russellsaintcyr.git
 * Prettier code formatting
 
 ## Planned Features
-* Angular 20 and signals
+* Angular 20+ and signals
 * Additional music services (Apple Music, YouTube Music, etc.)
 * Firebase for authentication and user preference storage
 * Enhanced playlist management tools
@@ -44,6 +44,7 @@ That's the app I wrote, which you can try out [here](https://russellsaintcyr.git
 * Playlist analytics (e.g. charts showing breakdown by genre, language, country, etc)
 * React Native version for iOS and Android
 * Progressive Web App (PWA) support
+* Improved accessiblity with Angular Aria
 
 ## Music Links
 * <a href="https://open.spotify.com/playlist/0pqyzLEpqtt1AzHB0RGdvQ?si=f9c91a68de8240f3" target="_blank">My Top 40 of 2024</a>

@@ -6,4 +6,5 @@
 export const environment = {
   production: false,
   spotifyClientId: 'e8629f625be5446a8434f03c0063ac27', // Dev client ID
+  clarityProjectId: 'u7mugszk1b'
 };
