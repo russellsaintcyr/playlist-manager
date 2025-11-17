@@ -10,8 +10,7 @@ import { DatePipe } from '@angular/common';
     templateUrl: './album.component.html',
     styleUrls: ['./album.component.css'],
     providers: [SpotifyService],
-    standalone: true,
-    imports: [RouterLink, DatePipe],
+    imports: [RouterLink, DatePipe]
 })
 export class AlbumComponent implements OnInit {
   public album: any;

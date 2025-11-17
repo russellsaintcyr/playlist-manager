@@ -9,12 +9,11 @@ import { LoginComponent } from '../login/login.component';
     selector: 'app-settings',
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css'],
-    standalone: true,
     imports: [
         FormsModule,
         StatsComponent,
         LoginComponent,
-    ],
+    ]
 })
 export class SettingsComponent implements OnInit {
   // Injected dependencies

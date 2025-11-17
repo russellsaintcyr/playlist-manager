@@ -10,8 +10,7 @@ import { DatePipe } from '@angular/common';
     templateUrl: './artist.component.html',
     styleUrls: ['./artist.component.css'],
     providers: [SpotifyService],
-    standalone: true,
-    imports: [RouterLink, DatePipe],
+    imports: [RouterLink, DatePipe]
 })
 export class ArtistComponent implements OnInit {
   private artistID: string | null;

@@ -13,8 +13,7 @@ import { Router, RouterLink } from '@angular/router';
     templateUrl: './playlist.component.html',
     styleUrls: ['./playlist.component.css'],
     providers: [SpotifyService],
-    standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink]
 })
 export class PlaylistComponent implements OnInit, AfterViewChecked {
   // Injected dependencies

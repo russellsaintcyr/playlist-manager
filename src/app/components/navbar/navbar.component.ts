@@ -10,8 +10,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.css'],
     providers: [SpotifyService],
-    standalone: true,
-    imports: [RouterLink],
+    imports: [RouterLink]
 })
 export class NavbarComponent implements OnInit {
   public isPlaying: boolean;

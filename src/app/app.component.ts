@@ -8,8 +8,7 @@ import { environment } from '../environments/environment';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    standalone: true,
-    imports: [NavbarComponent, RouterOutlet],
+    imports: [NavbarComponent, RouterOutlet]
 })
 export class AppComponent {
   title = 'Hello Russell';

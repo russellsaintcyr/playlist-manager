@@ -13,8 +13,7 @@ import { DatePipe } from '@angular/common';
     templateUrl: './now-playing.component.html',
     styleUrls: ['./now-playing.component.css'],
     providers: [SpotifyService],
-    standalone: true,
-    imports: [RouterLink, DatePipe],
+    imports: [RouterLink, DatePipe]
 })
 export class NowPlayingComponent implements OnInit {
   // private spotifyService: SpotifyService;

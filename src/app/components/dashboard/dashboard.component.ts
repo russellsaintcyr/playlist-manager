@@ -9,8 +9,7 @@ import { FormsModule } from '@angular/forms';
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css'],
     providers: [SpotifyService],
-    standalone: true,
-    imports: [FormsModule],
+    imports: [FormsModule]
 })
 export class DashboardComponent implements OnInit {
   // Injected dependencies
