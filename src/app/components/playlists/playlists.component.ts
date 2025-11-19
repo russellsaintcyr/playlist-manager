@@ -55,6 +55,8 @@ export class PlaylistsComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
+          console.log('Full playlist data:', res);
+          console.log('Sample playlist item:', res.items?.[0]);
           this.playlists = res;
           localStorage.setItem('playlists', JSON.stringify(res));
         },
@@ -71,6 +73,18 @@ export class PlaylistsComponent implements OnInit {
     localStorage.setItem('selectedPlaylist', JSON.stringify(playlist));
     // this.alertService.success('Set playlist ID to ' + playlist.id);
     this.router.navigateByUrl('/playlist');
+  }
+
+  onPlaylistClick(event: Event, playlist) {
+    // Add click effect class to the clicked card
+    const card = event.currentTarget as HTMLElement;
+    card.classList.add('clicked');
+    
+    // Remove the effect and navigate after a brief delay
+    setTimeout(() => {
+      card.classList.remove('clicked');
+      this.setPlaylist(playlist);
+    }, 200);
   }
 
   loadOffset(url) {

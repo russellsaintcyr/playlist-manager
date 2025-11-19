@@ -1,0 +1,68 @@
+.playlist-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.playlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.playlist-card.clicked {
+  transform: scale(0.95) translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: transform 0.15s ease;
+}
+
+.playlist-card.clicked .playlist-image {
+  transform: scale(1.02);
+  filter: brightness(0.7);
+}
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.playlist-image {
+  transition: transform 0.3s ease;
+}
+
+.playlist-card:hover .playlist-image {
+  transform: scale(1.05);
+  filter: brightness(0.4);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.playlist-card:hover .overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.overlay-item {
+  margin-bottom: 8px;
+}
+
+.overlay-item:last-child {
+  margin-bottom: 0;
+}
