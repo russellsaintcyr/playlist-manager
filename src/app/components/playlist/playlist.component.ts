@@ -34,7 +34,6 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   public stars5 = 0;
   public ratings: Array<Rating>;
   public playlist;
-  public ratingSystem = 'THUMBS';
 
   private ratingsLoaded: boolean;
   private tracksLoaded: boolean;
@@ -62,7 +61,6 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
       this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
     document.body.style.backgroundImage = "url('" + this.selectedPlaylist.images[0].url + "')";
     this.loadPlaylist();
-    // this.ratingSystem = (localStorage.getItem('ratingSystem') !== null) ? localStorage.getItem('ratingSystem') : 'STARS';
   }
 
   loadPlaylist() {
@@ -89,7 +87,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
 
   setRating(rating: number, track: Track) {
     console.log(`Setting rating to ${rating} for ${track.name}`);
-    const elem = document.getElementById(this.ratingSystem + rating);
+    const elem = document.getElementById('THUMBS' + rating);
     // console.log();
     NowPlayingComponent.showStars(rating, track.id, null);
     const newRating = new Rating(track.uri, this.selectedPlaylist.id, rating);
@@ -152,10 +150,10 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
       if (localStorage.getItem('ratings')) this.ratings = JSON.parse(localStorage.getItem('ratings')!);
       console.log('Loaded ' + this.ratings.length + ' ratings.');
       // loop through all tracks and adjust stars
-      console.log(`Looping through tracks for ratings, system ${this.ratingSystem}`);
+      console.log(`Looping through tracks for ratings`);
       for (const x in this.tracks) {
         // first ensure is loaded in DOM
-        const elemName = this.ratingSystem + '3-' + this.tracks[x].track.id;
+        const elemName = 'THUMBS3-' + this.tracks[x].track.id;
         // console.log(`Searching for element ${elemName}`);
         if (document.getElementById(elemName) === null) {
           console.log(`Exiting for loop because could not find element ${elemName}`);

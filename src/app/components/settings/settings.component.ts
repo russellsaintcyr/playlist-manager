@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
-import { AppSettings } from '../../../appSettings';
 import { FormsModule } from '@angular/forms';
 import { StatsComponent } from '../stats/stats.component';
 import { LoginComponent } from '../login/login.component';
@@ -21,7 +20,6 @@ export class SettingsComponent implements OnInit {
   private alertService = inject(AlertService);
 
   // Public properties
-  public ratingSystem = 'THUMBS';
   public bearerToken: string | null;
 
   constructor() {
@@ -29,8 +27,6 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(localStorage.getItem('ratingSystem'));
-    // this.ratingSystem = (localStorage.getItem('ratingSystem') !== null) ? localStorage.getItem('ratingSystem') : AppSettings.RATING_SYSTEMS.STARS5;
   }
 
   setBearerToken() {
