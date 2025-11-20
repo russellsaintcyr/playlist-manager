@@ -181,16 +181,16 @@ export class NowPlayingComponent implements OnInit {
     const elem = document.getElementById('star' + rating);
     // console.log();
     NowPlayingComponent.showStars(rating, track.id, null);
-    const newRating = new Rating(track.uri, rating);
-    // search for existing rating
-    const obj = this.ratings.find(function (obj: Rating) {
-      return obj.trackURI === track.uri;
+    const newRating = new Rating(track.uri, this.selectedPlaylist.id, rating);
+    // search for existing rating for this track in this playlist
+    const obj = this.ratings.find((obj: Rating) => {
+      return obj.trackURI === track.uri && obj.playlistId === this.selectedPlaylist.id;
     });
     if (obj === undefined) {
       this.ratings.push(newRating);
     } else {
-      const xxx = this.ratings.findIndex(function (obj: Rating) {
-        return obj.trackURI === track.uri;
+      const xxx = this.ratings.findIndex((obj: Rating) => {
+        return obj.trackURI === track.uri && obj.playlistId === this.selectedPlaylist.id;
       });
       this.ratings.splice(xxx, 1, newRating);
     }

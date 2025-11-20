@@ -92,24 +92,23 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
     const elem = document.getElementById(this.ratingSystem + rating);
     // console.log();
     NowPlayingComponent.showStars(rating, track.id, null);
-    const newRating = new Rating(track.uri, rating);
-    // search for existing rating
+    const newRating = new Rating(track.uri, this.selectedPlaylist.id, rating);
+    // search for existing rating for this track in this playlist
     let obj;
     if (this.ratings !== undefined) {
-      obj = this.ratings.find(function (obj: Rating) {
-        return obj.trackURI === track.uri;
+      obj = this.ratings.find((obj: Rating) => {
+        return obj.trackURI === track.uri && obj.playlistId === this.selectedPlaylist.id;
       });
     } else {
       this.ratings = [];
     }
-    // no rating
+    // no rating for this track in this playlist
     if (obj === undefined) {
       this.ratings.push(newRating);
     } else {
-      let oldRating = -1;
-      const xxx = this.ratings.findIndex(function (obj: Rating) {
-        oldRating = track.rating;
-        return obj.trackURI === track.uri;
+      let oldRating = obj.rating;
+      const xxx = this.ratings.findIndex((obj: Rating) => {
+        return obj.trackURI === track.uri && obj.playlistId === this.selectedPlaylist.id;
       });
       // decrement any previous rating!
       if (oldRating === 0) this.stars0--;
@@ -164,11 +163,11 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
         } else {
           // console.log(`Found element ${elemName}`);
         }
-        // see if have rating
+        // see if have rating for this track in this playlist
         let obj;
         if (this.ratings !== undefined) {
-          obj = this.ratings.find(function (obj: Rating) {
-            return obj.trackURI === traxx[x].track.uri;
+          obj = this.ratings.find((ratingObj: Rating) => {
+            return ratingObj.trackURI === traxx[x].track.uri && ratingObj.playlistId === this.selectedPlaylist.id;
           });
         } else {
           this.ratings = [];
@@ -193,6 +192,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
       this.ratingsLoaded = true;
     } else {
       console.log('No ratings found in local storage');
+      this.ratingsLoaded = true; // Set this to true to prevent repeated logging
     }
   }
 
@@ -246,8 +246,13 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   playRating(rating: number, action: string) {
     const arrTracks: string[] = [];
     for (const x in this.tracks) {
-      // console.log(this.tracks[x].uri + ' ' + this.tracks[x].rating);
-      if (this.tracks[x].track.rating === rating) {
+      // Check if track has the specified rating in this specific playlist
+      const trackRating = this.ratings.find(r => 
+        r.trackURI === this.tracks[x]?.track?.uri && 
+        r.playlistId === this.selectedPlaylist.id
+      );
+      
+      if (trackRating && trackRating.rating === rating) {
         arrTracks.push(this.tracks[x]?.track?.uri);
       }
     }

@@ -55,8 +55,8 @@ export class PlaylistsComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
-          console.log('Full playlist data:', res);
-          console.log('Sample playlist item:', res.items?.[0]);
+          // console.log('Full playlist data:', res);
+          // console.log('Sample playlist item:', res.items?.[0]);
           this.playlists = res;
           localStorage.setItem('playlists', JSON.stringify(res));
         },
