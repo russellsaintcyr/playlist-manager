@@ -33,6 +33,7 @@
     "@angular/router": "^19.2.15",
     "@microsoft/clarity": "^1.0.0",
     "express": "^4.18.2",
+    "firebase": "^12.6.0",
     "ngx-toastr": "^17.0.2",
     "rxjs": "^7.8.1",
     "zone.js": "^0.15.1"
@@ -50,6 +51,7 @@
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "angular-cli-ghpages": "^2.0.3",
+    "dotenv": "^17.2.3",
     "eslint": "^8.54.0",
     "prettier": "^3.1.0",
     "typescript": "~5.5.4"

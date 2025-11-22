@@ -2,6 +2,7 @@ import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
+import { FirebaseService } from '../../services/firebase.service';
 import { Track } from '../../classes/track';
 import { Rating } from '../../classes/rating';
 import { Router, RouterLink } from '@angular/router';
@@ -22,8 +23,8 @@ export class NowPlayingComponent implements OnInit {
   // private static alertService: AlertService;
 
   private destroyRef = inject(DestroyRef);
-  private timerRefresh: number;
-  private timerProgressBar: number;
+  private timerRefresh: any;
+  private timerProgressBar: any;
   private refreshPeriod = 60000;
   private initial_progress_ms: number;
   private used_ms = 0;
@@ -56,13 +57,14 @@ export class NowPlayingComponent implements OnInit {
         rating === 5 ? cssSelected : cssUnSelected;
     } else {
       // console.log('Failed to get element with ID star1-' + trackID + '. Retrying in 1 second.');
-      const intervalId2: number = setInterval(() => this.showStars(rating, trackID, intervalId2), 1000);
+      const intervalId2: any = setInterval(() => this.showStars(rating, trackID, intervalId2), 1000);
     }
   }
 
   constructor(
     private spotifyService: SpotifyService,
     private alertService: AlertService,
+    private firebaseService: FirebaseService,
     private router: Router
   ) {
     console.log('NowPlayingComponent constructor called');
@@ -71,14 +73,17 @@ export class NowPlayingComponent implements OnInit {
   ngOnInit() {
     this.autoSkip = false;
     this.getCurrentlyPlaying(null);
+    
+    // Read from localStorage (Firebase data should already be loaded by AppComponent)
     if (localStorage.getItem('ratings') === null) {
-      console.log('ngOnInit - No local ratings yet set.');
+      console.log('NowPlaying - No local ratings yet set.');
       this.ratings = [];
       localStorage.setItem('ratings', JSON.stringify(this.ratings));
     } else {
       if (localStorage.getItem('ratings')) this.ratings = JSON.parse(localStorage.getItem('ratings')!);
-      console.log('ngOnInit - Loaded ' + this.ratings.length + ' ratings from local data.');
+      console.log('NowPlaying - Loaded ' + this.ratings.length + ' ratings from localStorage.');
     }
+    
     if (localStorage.getItem('selectedPlaylist'))
       this.selectedPlaylist = JSON.parse(localStorage.getItem('selectedPlaylist')!);
     // reload in X seconds
@@ -195,6 +200,7 @@ export class NowPlayingComponent implements OnInit {
       this.ratings.splice(xxx, 1, newRating);
     }
     localStorage.setItem('ratings', JSON.stringify(this.ratings));
+    this.saveRatingsToFirebase();
     // update track rating
     this.track.rating = rating;
     // TODO enable next line via user preference, for now do automatically
@@ -255,5 +261,15 @@ export class NowPlayingComponent implements OnInit {
   viewArtist(artistID) {
     localStorage.setItem('artistID', artistID);
     this.router.navigateByUrl('/artist');
+  }
+
+  private async saveRatingsToFirebase(): Promise<void> {
+    try {
+      await this.firebaseService.saveRatings(this.ratings);
+      console.log('Automatically saved ratings to Firebase');
+    } catch (error) {
+      console.error('Failed to auto-save ratings to Firebase:', error);
+      // Don't show user error since this is automatic background save
+    }
   }
 }

@@ -1,0 +1,21 @@
+
+> playlist-manager@17 build:dev
+> ng build
+
+❯ Building...
+✔ Building...
+Initial chunk files   | Names         |  Raw size | Estimated transfer size
+main-LJNEOYUH.js      | main          | 754.17 kB |               193.51 kB
+styles-W5KYH766.css   | styles        | 256.81 kB |                30.55 kB
+polyfills-B6TNHZQ6.js | polyfills     |  34.58 kB |                11.32 kB
+
+                      | Initial total |   1.05 MB |               235.38 kB
+
+Application bundle generation complete. [8.047 seconds]
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m1 rules skipped due to selector errors:
+  0% -> Unmatched selector: %[0m
+
+
+Output location: /Users/russellsaintcyr/projects/playlist-manager/dist
+

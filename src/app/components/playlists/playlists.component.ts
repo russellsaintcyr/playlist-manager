@@ -22,6 +22,7 @@ export class PlaylistsComponent implements OnInit {
     private alertService: AlertService,
     private router: Router
   ) {
+    console.log('PlaylistsComponent constructor called  ');  
     this.priv = 'Privy';
     this.pub = 'Pubby';
   }

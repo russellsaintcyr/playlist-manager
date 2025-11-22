@@ -45,7 +45,7 @@ export class CallbackComponent implements OnInit {
     this.accessToken = this.getQueryVariable('access_token');
     this.tokenType = this.getQueryVariable('token_type');
     this.expiresIn = this.getQueryVariable('expires_in');
-    console.log('Extracted token:', this.accessToken);
+    // console.log('Extracted token:', this.accessToken);
     
     // set token if we got one
     if (this.accessToken) {

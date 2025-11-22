@@ -2,6 +2,7 @@ import { Component, OnInit, inject, DestroyRef, AfterViewChecked } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SpotifyService } from '../../services/spotify.service';
 import { AlertService } from '../../services/alert.service';
+import { FirebaseService } from '../../services/firebase.service';
 import { Rating } from '../../classes/rating';
 import { NowPlayingComponent } from '../now-playing/now-playing.component';
 import { Track } from '../../classes/track';
@@ -21,6 +22,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   private destroyRef = inject(DestroyRef);
   private _spotifyService = inject(SpotifyService);
   private alertService = inject(AlertService);
+  private firebaseService = inject(FirebaseService);
   private router = inject(Router);
 
   // private playlistID: string; //46JHZX9X1hHUpxhZCkKuS1
@@ -117,8 +119,9 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
       if (oldRating === 5) this.stars5--;
       this.ratings.splice(xxx, 1, newRating);
     }
-    // update local storage
+    // update local storage and Firebase
     localStorage.setItem('ratings', JSON.stringify(this.ratings));
+    this.saveRatingsToFirebase();
     // increment
     if (rating === 0) this.stars0++;
     if (rating === 1) this.stars1++;
@@ -145,15 +148,24 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
       console.log('Tracks not yet defined so not getting ratings.');
       return;
     }
-    const traxx = this.tracks;
+
+    // Read from localStorage (Firebase data should already be loaded by AppComponent)
     if (localStorage.getItem('ratings') !== null) {
       if (localStorage.getItem('ratings')) this.ratings = JSON.parse(localStorage.getItem('ratings')!);
-      console.log('Loaded ' + this.ratings.length + ' ratings.');
-      // loop through all tracks and adjust stars
-      console.log(`Looping through tracks for ratings`);
-      for (const x in this.tracks) {
-        // first ensure is loaded in DOM
-        const elemName = 'THUMBS3-' + this.tracks[x].track.id;
+      console.log('Playlist - Loaded ' + this.ratings.length + ' ratings from localStorage.');
+    } else {
+      console.log('Playlist - No ratings found in localStorage.');
+      this.ratings = [];
+    }
+    this.processRatingsForTracks();
+  }
+
+  private processRatingsForTracks() {
+    // loop through all tracks and adjust stars
+    console.log(`Looping through tracks for ratings`);
+    for (const x in this.tracks) {
+      // first ensure is loaded in DOM
+      const elemName = 'THUMBS3-' + this.tracks[x].track.id;
         // console.log(`Searching for element ${elemName}`);
         if (document.getElementById(elemName) === null) {
           console.log(`Exiting for loop because could not find element ${elemName}`);
@@ -165,7 +177,7 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
         let obj;
         if (this.ratings !== undefined) {
           obj = this.ratings.find((ratingObj: Rating) => {
-            return ratingObj.trackURI === traxx[x].track.uri && ratingObj.playlistId === this.selectedPlaylist.id;
+            return ratingObj.trackURI === this.tracks[x].track.uri && ratingObj.playlistId === this.selectedPlaylist.id;
           });
         } else {
           this.ratings = [];
@@ -188,10 +200,6 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
       }
       console.log('Done looping through tracks for ratings');
       this.ratingsLoaded = true;
-    } else {
-      console.log('No ratings found in local storage');
-      this.ratingsLoaded = true; // Set this to true to prevent repeated logging
-    }
   }
 
   showAllTracks() {
@@ -335,5 +343,15 @@ export class PlaylistComponent implements OnInit, AfterViewChecked {
   viewArtist(artistID) {
     localStorage.setItem('artistID', artistID);
     this.router.navigateByUrl('/artist');
+  }
+
+  private async saveRatingsToFirebase(): Promise<void> {
+    try {
+      await this.firebaseService.saveRatings(this.ratings);
+      console.log('Automatically saved ratings to Firebase');
+    } catch (error) {
+      console.error('Failed to auto-save ratings to Firebase:', error);
+      // Don't show user error since this is automatic background save
+    }
   }
 }

@@ -24,4 +24,28 @@
 <a (click)="clearRatings()" href="javascript:void(0)" class="btn btn-danger">Clear ratings</a>
 
 <hr />
+<h4>Firebase Ratings</h4>
+<div class="btn-group" role="group">
+  <button 
+    type="button" 
+    class="btn btn-primary" 
+    (click)="saveRatingsToFirebase()"
+    [disabled]="isSavingToFirebase"
+  >
+    {{ isSavingToFirebase ? 'Saving...' : 'Save Ratings to Firebase' }}
+  </button>
+  <button 
+    type="button" 
+    class="btn btn-secondary" 
+    (click)="loadRatingsFromFirebase()"
+    [disabled]="isLoadingFromFirebase"
+  >
+    {{ isLoadingFromFirebase ? 'Loading...' : 'Load Ratings from Firebase' }}
+  </button>
+</div>
+<p class="text-muted mt-2" style="font-size: 0.9rem;">
+  Note: You must be logged in to Spotify for these features to work.
+</p>
+
+<hr />
 <app-login></app-login>
