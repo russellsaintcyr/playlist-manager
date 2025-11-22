@@ -8,6 +8,9 @@
     "dev": "ng serve --host 0.0.0.0",
     "start": "node server.js --port ${PORT}",
     "test": "ng test",
+    "test:vitest": "vitest",
+    "test:vitest:ui": "vitest --ui",
+    "test:vitest:run": "vitest run",
     "build": "ng build --configuration production",
     "build:dev": "ng build",
     "build:gh-pages": "ng build --configuration production",
@@ -47,13 +50,17 @@
     "@angular-eslint/template-parser": "^18.4.3",
     "@angular/cli": "^19.2.19",
     "@angular/compiler-cli": "^19.2.15",
+    "@types/jsdom": "^27.0.0",
     "@types/node": "^20.19.25",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
+    "@vitest/ui": "^4.0.13",
     "angular-cli-ghpages": "^2.0.3",
     "dotenv": "^17.2.3",
     "eslint": "^8.54.0",
+    "jsdom": "^27.2.0",
     "prettier": "^3.1.0",
-    "typescript": "~5.5.4"
+    "typescript": "~5.5.4",
+    "vitest": "^4.0.13"
   }
 }
