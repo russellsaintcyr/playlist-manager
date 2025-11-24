@@ -1,0 +1,32 @@
+<h2>{{ selectedPlaylist.name }}</h2>
+<img src="{{ selectedPlaylist.images[0]?.url }}" class="img-responsive" />
+<!--<h5>No. of Tracks: {{selectedPlaylist.tracks.total}}</h5>-->
+{{ stars0 }} Unrated
+<a href="javascript:void(0)" (click)="playRating(0, 'play')"> Play <i class="glyphicon glyphicon-play"></i> </a>
+<a href="javascript:void(0)" (click)="playRating(0, 'createPlaylist')"
+  >Create Playlist <i class="glyphicon glyphicon-file"></i
+></a>
+<br />
+{{ stars5 }}
+🥰
+<a href="javascript:void(0)" (click)="playRating(5, 'play')">Play <i class="glyphicon glyphicon-play"></i></a>
+<a href="javascript:void(0)" (click)="playRating(5, 'createPlaylist')"
+  >Create Playlist <i class="glyphicon glyphicon-file"></i
+></a>
+<br />
+{{ stars4 }}
+🤔
+<a href="javascript:void(0)" (click)="playRating(4, 'play')">Play <i class="glyphicon glyphicon-play"></i></a>
+<a href="javascript:void(0)" (click)="playRating(4, 'createPlaylist')"
+  >Create Playlist <i class="glyphicon glyphicon-file"></i
+></a>
+<br />
+{{ stars3 }}
+👎
+<a href="javascript:void(0)" (click)="playRating(3, 'play')">Play <i class="glyphicon glyphicon-play"></i></a>
+<a href="javascript:void(0)" (click)="playRating(3, 'createPlaylist')"
+  >Create Playlist <i class="glyphicon glyphicon-file"></i
+></a>
+<br />
+<a href="javascript:void(0)" (click)="playAllTracks()"> Play All <i class="glyphicon glyphicon-play"></i> </a>
+<a href="javascript:void(0)" (click)="updateCounts()"> Update Counts <i class="glyphicon glyphicon-repeat"></i> </a>

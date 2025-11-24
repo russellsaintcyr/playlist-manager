@@ -8,13 +8,14 @@ import { MetaTrack } from '../../classes/metatrack';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RatingsButtonsComponent } from '../ratings-buttons/ratings-buttons.component';
+import { PlaylistMetadataComponent } from '../playlist-metadata/playlist-metadata.component';
 
 @Component({
     selector: 'app-playlist-details',
     templateUrl: './playlist-details.component.html',
     styleUrls: ['./playlist-details.component.css'],
     providers: [SpotifyService],
-    imports: [RouterLink, RatingsButtonsComponent]
+    imports: [RouterLink, RatingsButtonsComponent, PlaylistMetadataComponent]
 })
 export class PlaylistDetailsComponent implements OnInit, AfterViewChecked {
   // Injected dependencies
@@ -173,81 +174,6 @@ export class PlaylistDetailsComponent implements OnInit, AfterViewChecked {
         },
         error: (err) => {
           throw new Error(err.statusText);
-        },
-      });
-  }
-
-  playRating(rating: number, action: string) {
-    const arrTracks: string[] = [];
-    for (const x in this.tracks) {
-      // Check if track has the specified rating in this specific playlist
-      const trackRating = this.ratings.find(r => 
-        r.trackURI === this.tracks[x]?.track?.uri && 
-        r.playlistId === this.selectedPlaylist.id
-      );
-      
-      if (trackRating && trackRating.rating === rating) {
-        arrTracks.push(this.tracks[x]?.track?.uri);
-      }
-    }
-    if (arrTracks.length > 0) {
-      if (action === 'play') {
-        this.alertService.info('Playing selected tracks');
-        this._spotifyService.controlPlayback({ uris: arrTracks }, 'play')
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (res) => {
-              console.log('Playback successfully called');
-            },
-            error: (err: HttpErrorResponse) => {
-              console.error(err);
-              this.alertService.error(err.error.error.message);
-            },
-          });
-      } else {
-        this.alertService.info('Creating new playlist');
-        // TODO get playlist name from user?
-        const playlistName = rating + '-star Tracks';
-        // first create playlist, then add tracks
-        this._spotifyService.createPlaylist({ name: playlistName })
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (res) => {
-              this._spotifyService.addToPlaylist({ uris: arrTracks }, res.id)
-                .pipe(takeUntilDestroyed(this.destroyRef))
-                .subscribe({
-                  next: (res2) => {
-                    this.alertService.success(
-                      'Created new playlist ' + playlistName + ' with ' + arrTracks.length + ' tracks.'
-                    );
-                  },
-                  error: (err: HttpErrorResponse) => {
-                    console.error(err);
-                    this.alertService.error(err.error.error.message);
-                  },
-                });
-            },
-            error: (err) => {
-              console.error(err);
-              this.alertService.error(err.error.error.message);
-            },
-          });
-      }
-    } else {
-      this.alertService.info('No songs assigned to this rating.');
-    }
-  }
-
-  playAllTracks() {
-    this._spotifyService.controlPlayback({ context_uri: this.selectedPlaylist.uri }, 'play')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (res) => {
-          this.alertService.success('Playing all tracks in playlist');
-        },
-        error: (err: HttpErrorResponse) => {
-          console.error(err);
-          this.alertService.error(err.error.error.message);
         },
       });
   }
