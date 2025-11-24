@@ -1,0 +1,18 @@
+<app-my-button
+  text="👍"
+  [isSelected]="track.rating === 5"
+  fontSize="55px"
+  (buttonClick)="onRatingClick(5)"
+></app-my-button>
+<app-my-button
+  text="🤔"
+  [isSelected]="track.rating === 4"
+  fontSize="55px"
+  (buttonClick)="onRatingClick(4)"
+></app-my-button>
+<app-my-button
+  text="👎"
+  [isSelected]="track.rating === 3"
+  fontSize="55px"
+  (buttonClick)="onRatingClick(3)"
+></app-my-button>

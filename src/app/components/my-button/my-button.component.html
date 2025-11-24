@@ -1,0 +1,17 @@
+<button 
+  type="button" 
+  class="btn p-0 border-0 bg-transparent shadow-none text-decoration-none"
+  [style.font-size]="fontSize"
+  style="transition: opacity 0.3s ease, transform 0.2s ease, filter 0.3s ease; outline: none !important; box-shadow: none !important;"
+  [style.filter]="isSelected ? 'grayscale(0%) opacity(1)' : 'grayscale(90%) opacity(0.9)'"
+  onmouseover="this.style.opacity='0.7'; this.style.transform='scale(1.1)'"
+  onmouseout="this.style.opacity='1'; this.style.transform='scale(1)'"
+  onmousedown="this.style.transform='scale(0.95)'"
+  onmouseup="this.style.transform='scale(1.1)'"
+  (click)="onClick()"
+>
+  @if (icon) {
+    <i [class]="icon"></i>
+  }
+  {{ text }}
+</button>
