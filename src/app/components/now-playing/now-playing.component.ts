@@ -9,7 +9,6 @@ import { Router, RouterLink } from '@angular/router';
 import { Artist } from '../../classes/artist';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MyButtonComponent } from '../my-button/my-button.component';
 import { RatingsButtonsComponent } from '../ratings-buttons/ratings-buttons.component';
 
 @Component({
@@ -17,7 +16,7 @@ import { RatingsButtonsComponent } from '../ratings-buttons/ratings-buttons.comp
     templateUrl: './now-playing.component.html',
     styleUrls: ['./now-playing.component.css'],
     providers: [SpotifyService],
-    imports: [RouterLink, DatePipe, MyButtonComponent, RatingsButtonsComponent]
+    imports: [RouterLink, DatePipe, RatingsButtonsComponent]
 })
 export class NowPlayingComponent implements OnInit {
   // private spotifyService: SpotifyService;

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { PlaylistsComponent } from '../components/playlists/playlists.component';
 import { LoginComponent } from '../components/login/login.component';
-import { PlaylistComponent } from '../components/playlist/playlist.component';
+import { PlaylistDetailsComponent } from '../components/playlist-details/playlist-details.component';
 import { SettingsComponent } from '../components/settings/settings.component';
 import { CallbackComponent } from '../components/callback/callback.component';
 import { NowPlayingComponent } from '../components/now-playing/now-playing.component';
@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'playlist',
-    component: PlaylistComponent,
+    component: PlaylistDetailsComponent,
   },
   {
     path: 'nowplaying',
