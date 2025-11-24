@@ -57,7 +57,10 @@ export class SpotifyService {
 
   playNextPrevious(direction): Observable<any> {
     const URL = 'https://api.spotify.com/v1/me/player/' + direction;
-    return this.httpClient.post(URL, null, { headers: this.headers });
+    return this.httpClient.post(URL, null, { 
+      headers: this.headers, 
+      responseType: 'text' 
+    });
   }
 
   getCurrentlyPlaying(): Observable<any> {
@@ -67,7 +70,10 @@ export class SpotifyService {
 
   controlPlayback(body, verb): Observable<any> {
     const URL = 'https://api.spotify.com/v1/me/player/' + verb;
-    return this.httpClient.put(URL, body, { headers: this.headers });
+    return this.httpClient.put(URL, body, { 
+      headers: this.headers,
+      responseType: 'text'
+     });
   }
 
   getAuthorizeURL() {

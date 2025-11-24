@@ -8,6 +8,7 @@ import { Rating } from '../../classes/rating';
 import { Router, RouterLink } from '@angular/router';
 import { Artist } from '../../classes/artist';
 import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-now-playing',
@@ -216,9 +217,9 @@ export class NowPlayingComponent implements OnInit {
           // update track
           const intervalId = setInterval(() => this.getCurrentlyPlaying(intervalId), 1500);
         },
-        error: (err) => {
+        error: (err: HttpErrorResponse) => {
           console.error(err);
-          this.alertService.error(err._body);
+          this.alertService.error(err.error.error);
         },
       });
   }

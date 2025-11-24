@@ -39,7 +39,7 @@ export class FirebaseService {
    * @returns Promise that resolves when save is complete
    */
   async saveRatings(ratings: Rating[]): Promise<void> {
-    console.log('FirebaseService - Saving ratings', ratings);
+    console.log('FirebaseService - Saving ratings');
     try {
       // Use a test collection for unauthenticated access
       // When user auth is added, change to: users/${user.uid}/ratings
