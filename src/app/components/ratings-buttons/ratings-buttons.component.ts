@@ -14,6 +14,7 @@ import { FirebaseService } from '../../services/firebase.service';
 export class RatingsButtonsComponent implements OnInit {
   @Input() track!: Track;
   @Input() selectedPlaylist: any;
+  @Input() fontSize: string = '55px';
   
   private firebaseService = inject(FirebaseService);
   private ratings: Array<Rating> = [];
